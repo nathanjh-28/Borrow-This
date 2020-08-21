@@ -2,10 +2,74 @@
 
 
 {% block content %}
-    <header>
-        <h1 class="title is-1">
-            This is the Dashboard Page
-        </h1>
-    </header>
 
-    {% endblock%}
+<!-- Profile Info -->
+<div class="profile-header">
+    <h3 class="subtitle is-3 profile-header-text">About Me</h3>
+</div>
+<section class="profile-section">
+    <div class="box profile dashboard-boxes mb-3">
+        <article class="media">
+            <div class="media-left">
+                <figure class="image profile-pic">
+                    <img src="https://images.unsplash.com/photo-1549068106-b024baf5062d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80" alt="Image" width="245px" height="245px">
+                </figure>
+            </div>
+            <div class="media-content">
+                <div class="content">
+                    <p>
+                        <span class="title is-3">John Doe</span> 
+                        
+                        <br>
+                        <span>Austin Texas</span>
+                        <br>
+                        Bio: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla
+                        egestas. Nullam condimentum luctus turpis.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla
+                        egestas. Nullam condimentum luctus turpis.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla
+                        egestas. Nullam condimentum luctus turpis.
+                    </p>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<div class="profile-header">
+    <h3 class="subtitle is-3 profile-header-text">My Items</h3>
+</div>
+
+<section class="my-things">
+    <div class="box dashboard-boxes my-rental-items">
+        {% for i in '0123456789'|make_list %}
+        <div class="card my-rental-item mx-2">
+            <div class="card-image">
+                <figure class="image is-4by3">
+                    <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                </figure>
+            </div>
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-48x48">
+                            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <p class="title is-4">John Smith</p>
+                        <p class="subtitle is-6">@johnsmith</p>
+                    </div>
+                </div>
+                <div class="content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                    <a href="#">#css</a> <a href="#">#responsive</a>
+                    <br>
+                    <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock%}

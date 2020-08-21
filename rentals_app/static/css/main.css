@@ -13,3 +13,64 @@ footer {
     padding-top: 0;
     text-align: right;
 }
+
+/* browse page layout */
+
+/* https://getflywheel.com/layout/flexbox-create-modern-card-design-layout/ */
+
+/* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
+
+.br-rental-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100vw;
+
+}
+.br-rental-item{
+    /* flex: 1 1 24%; */
+    flex-grow: 0;
+    flex-shrink: 1;
+    max-width: 22.5%;
+}
+
+/* dashboard layout */
+
+.profile-section, .my-things {
+    display:flex;
+    justify-content: center;
+}
+
+.dashboard-boxes{
+    width: 80%;
+}
+
+.profile {
+    /* justify-content: center; */
+}
+
+.profile-pic img {
+    width: 245px;
+    height: 245px;
+}
+
+.my-rental-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /* width: 100vw; */
+
+}
+.my-rental-item{
+    /* flex: 1 1 24%; */
+    flex-grow: 0;
+    flex-shrink: 1;
+    max-width: 22%;
+}
+
+.profile-header-text{}
+
+.profile-header{
+    display: flex;
+    justify-content: center;
+}
