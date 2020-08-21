@@ -65,7 +65,8 @@ footer {
     /* flex: 1 1 24%; */
     flex-grow: 0;
     flex-shrink: 1;
-    max-width: 22%;
+    width: 30%;
+    
 }
 
 .profile-header-text{}
