@@ -14,7 +14,35 @@ footer {
     text-align: right;
 }
 
-/* browse page layout */
+.blue-logo{
+    color: #0794D2;
+}
+
+/* main{
+    display: flex;
+    justify-content: center;
+} */
+
+.container {
+    width: 80%;
+}
+
+/* home page layout
+------------------------------------------- */
+
+/* .home-page-container {
+    display: flex;
+    justify-content: center;
+} */
+
+.welcome{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+
+/* browse page layout 
+--------------------------------------------*/
 
 /* https://getflywheel.com/layout/flexbox-create-modern-card-design-layout/ */
 
@@ -34,7 +62,10 @@ footer {
     max-width: 22.5%;
 }
 
-/* dashboard layout */
+/* dashboard layout 
+--------------------------------------------*/
+
+
 
 .profile-section, .my-things {
     display:flex;
