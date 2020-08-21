@@ -4,11 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Borrow This</title>
+    <!-- Bulma CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <!-- Main CSS -->
 </head>
 <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="https://bulma.io">
+                <h2 class="title is-3">Borrow This!</h2>
+            </a>
+        </div>
 
-{% block content %}
-{% endblock %}
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-light" href="#">Browse</a>
+                        <a class="button is-light" href="#">My Dashboard</a>
+                        <a class="button is-light" href="#">About</a>
+                        <a class="button is-info">
+                            <strong>Sign up</strong>
+                        </a>
+                        <a class="button is-light" href="#">
+                            Log in
+                        </a>
+                        <a class="button is-light" href="#">
+                            Log out
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <hr>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>All Rights Reserved 2020</p>
+    </footer>
     
 </body>
 </html>
