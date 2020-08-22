@@ -46,9 +46,6 @@ def signup(request):
     }
     return render(request, 'registration/signup.html', context)
 
-# --------------------------------------------------------- Login
-
-
 # --------------------------------------------------------- Dashboard
 
 def dashboard(request):
@@ -61,14 +58,25 @@ def browse(request):
 
 # --------------------------------------------------------- User Public
 
+def profile(request):
+    return render(request, 'public-profile.html')
 
 # --------------------------------------------------------- Item Details
 
+def item_detail(request):
+    return render(request, 'item-details.html')
 
 # --------------------------------------------------------- Add Item Form
 
+def add_item (request):
+    return render(request, 'add-item.html')
 
 # --------------------------------------------------------- Add Reservation Form
 
+def add_rez(request):
+    return render(request, 'add-reservation.html')
 
 # --------------------------------------------------------- Reservation Details
+
+def rez_detail(request):
+    return render(request, 'reservation-detail.html')

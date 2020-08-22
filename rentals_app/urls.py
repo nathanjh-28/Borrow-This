@@ -3,40 +3,41 @@ from . import views
 
 urlpatterns = [
     
-    #--------------------------------  Home
+# ---------------------------------------------------------  Home
     
     path('',views.home, name='home'),
 
-    #--------------------------------  SignUp Form
+# ---------------------------------------------------------  SignUp Form
 
     path('accounts/signup',views.signup, name='signup'),
-
-    #--------------------------------  Login
-
     
-    #--------------------------------  Dashboard
+# ---------------------------------------------------------  Dashboard
     
     path('dashboard/', views.dashboard, name='dashboard'),
 
-    #--------------------------------  Browse
+# ---------------------------------------------------------  Public Profile
+
+    path('profile/',views.profile,name='profile'),
+
+# ---------------------------------------------------------  Browse
     
     path('browse/', views.browse, name='browse'),
 
-    #--------------------------------  User Public
+# ---------------------------------------------------------  Add Item Form
 
+    path('items/new', views.add_item, name='add_item'),
 
-    #--------------------------------  Item Details
+# ---------------------------------------------------------  Item Details
 
+    path('items/detail', views.item_detail, name='item_detail'),
 
-    #--------------------------------  Add Item Form
+# ---------------------------------------------------------  Add Reservation Form
 
+    path('rez/new', views.add_rez, name='add_rez'),
 
-    #--------------------------------  Add Reservation Form
+# ---------------------------------------------------------  Reservation Details
 
-
-    #--------------------------------  Reservation Details
-
-
+    path('rez/detail', views.rez_detail, name='rez_detail'),
 
     # TBD Update Res, Update Item, Update profile
     # TBD page for past reservations rather than on the dashboard
