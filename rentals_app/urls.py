@@ -9,6 +9,7 @@ urlpatterns = [
 
     #--------------------------------  SignUp Form
 
+    path('accounts/signup',views.signup, name='signup'),
 
     #--------------------------------  Login
 
