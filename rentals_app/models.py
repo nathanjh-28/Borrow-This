@@ -13,7 +13,7 @@ class Profile(models.Model):
     email = models.EmailField(max_length=254)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    display_name = models.CharField(max_length=50)
+    display_name = models.CharField('Display Name', max_length=50)
     image = models.URLField(max_length=500,default='https://images.unsplash.com/photo-1506551109886-6101f48c1ab9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80')
     location = models.CharField(max_length=100)
 
@@ -42,11 +42,11 @@ class Rental_Item(models.Model):
     #     base_field=CharField(max_length=20),
     #     size=6, 
     #     max_length=(6*20))
-    picture = models.URLField(max_length=200, blank=True)
-    link = models.URLField(max_length=200,blank=True)
+    picture = models.URLField('Picture (URL)', max_length=200, blank=True)
+    link = models.URLField('Link To Producte Page',max_length=200,blank=True)
     available = models.BooleanField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    replacement_value = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField('Price Per Day', max_digits=10, decimal_places=2)
+    replacement_value = models.DecimalField('Replacement Value', max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.title

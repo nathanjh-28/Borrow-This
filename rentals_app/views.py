@@ -6,7 +6,7 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 # --------------------------------------------------------- Models, Forms
 from .models import Profile
-from .forms import ProfileForm
+from .forms import ProfileForm, RentalItemForm
 
 
 #____________________________________________________________________
@@ -69,7 +69,23 @@ def item_detail(request):
 # --------------------------------------------------------- Add Item Form
 
 def add_item (request):
-    return render(request, 'add-item.html')
+    error_message = ''
+    if request.method == 'POST':
+        form = RentalItemForm(request.POST)
+        if form.is_valid():
+            new_item = form.save(commit=False)
+            user = request.user
+            current_profile = Profile.objects.get(user_id=user.id)
+            new_item.owner_id = current_profile.id
+            new_item.save()
+            return redirect('home')
+        else: error_message = 'Invalid - Try Again'
+    form = RentalItemForm
+    context = {
+        'form':form,
+        'error_message': error_message
+    }
+    return render(request, 'add-item.html', context)
 
 # --------------------------------------------------------- Add Reservation Form
 
