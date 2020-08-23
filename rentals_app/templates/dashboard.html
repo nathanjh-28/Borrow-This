@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <!-- Profile Info -->
+    <div class="profile-header mt-6">
+        <h3 class="subtitle is-3 profile-header-text">About Me</h3>
+    </div>
+    <section class="profile-section">
+        <div class="box profile dashboard-boxes mb-3">
+            <article class="media">
+                <div class="media-left">
+                    <figure class="image profile-pic">
+                        <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="Image" width="245px" height="245px">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <div class="content">
+                        <p>
+                            <span class="title is-3">John Doe</span> 
+                            
+                            <br>
+                            <span>Austin Texas</span>
+                            <br>
+                            Bio: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla
+                            egestas. Nullam condimentum luctus turpis.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla
+                            egestas. Nullam condimentum luctus turpis.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla
+                            egestas. Nullam condimentum luctus turpis.
+                        </p>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+    
+    <!-- My Items Section -->
+    <div class="profile-header">
+        <h3 class="subtitle is-3 profile-header-text">My Items</h3>
+        <button class="button is-success mx-3">Add Item</button>
+    </div>
+    
+    <section class="my-things">
+        <div class="box dashboard-boxes my-rental-items">
+            {% for i in '012'|make_list %}
+            <div class="card my-rental-item mx-2 my-2">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img src="https://images.unsplash.com/photo-1570106335104-fd2fe80c632e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=824&q=80" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="title is-4">Bicycle</p>
+                            <p class="subtitle is-6">status</p>
+                        </div>
+                    </div>
+                    <div class="content">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    
+    <!-- My Reservations Section -->
+    <div class="profile-header">
+        <h3 class="subtitle is-3 profile-header-text">My Reservations</h3>
+    </div>
+    
+    <section class="my-things">
+        <div class="box dashboard-boxes my-rental-items">
+            {% for i in '012'|make_list %}
+            <div class="card my-rental-item mx-2 mb-2">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img src="https://images.unsplash.com/photo-1570106335104-fd2fe80c632e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=824&q=80" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="title is-4">Bicycle</p>
+                            <p class="subtitle is-6">Oct 10 - 20</p>
+                        </div>
+                    </div>
+                    <div class="content">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+
+
+{% endblock%}
