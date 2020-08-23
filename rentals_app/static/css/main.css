@@ -9,6 +9,11 @@ main {
     flex: 1 0 auto;
 }
 
+.container {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
 footer {
     padding-top: 0;
     text-align: right;
@@ -18,28 +23,81 @@ footer {
     color: #0794D2;
 }
 
-/* main{
-    display: flex;
-    justify-content: center;
-} */
-
-.container {
-    width: 80%;
+.navbar {
+    height: 10%;
 }
+
+.navbar-spacer{
+    height: 10px;
+    width:100%;
+    background-color: whitesmoke;
+}
+
 
 /* home page layout
 ------------------------------------------- */
 
-/* .home-page-container {
+.hero {
+    width: 100vw;
+    height: 90vh;
+    /* background-image: url('https://images.unsplash.com/photo-1579208575657-c595a05383b7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80'); */
+    background-image: url('https://images.unsplash.com/photo-1571333250176-3c316199994b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80');
+    background-position: top center;
+    background-size: cover;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+.hero-body {
     display: flex;
     justify-content: center;
-} */
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.hero-text {
+width: 80%;
+}
+
+.hero-space{
+    height: 50%;
+    width: 100px;
+}
+
+.hero h1, .hero h2 {
+    color: white;
+}
 
 .welcome{
-    width: 80%;
+    display: flex;
+    justify-content: center;
+    height: 90vh;
+}
+
+.cat {
+    width: 45%;
+    height: 60px;
+}
+
+.about-section{
     display: flex;
     justify-content: center;
 }
+
+.about-text{
+    width: 80%;
+    background-color: white;
+
+}
+
+.about-body{
+    display: flex;
+
+
+}
+
+
 
 /* browse page layout 
 --------------------------------------------*/
@@ -48,36 +106,47 @@ footer {
 
 /* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
 
+/* this is the parent for all of browse page content */
+.browse-page{
+    display: flex;
+    /* justify-content: center; */
+    flex-direction: column;
+    background-color: whitesmoke;
+}
+
+/* parent of the header */
+.browse-header {
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: center;
+}
+
+/* parent of the rental items */
 .br-rental-items {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    width: 100vw;
-
 }
+/* child of rental items */
 .br-rental-item{
-    /* flex: 1 1 24%; */
     flex-grow: 0;
     flex-shrink: 1;
-    max-width: 22.5%;
+    max-width: 24%;
 }
+
 
 /* dashboard layout 
 --------------------------------------------*/
 
+/* parent for all dashboard content */
+.dashboard-page{
+    display: flex;
+    flex-direction: column;
+}
 
-
-.profile-section, .my-things {
+.profile-section {
     display:flex;
     justify-content: center;
-}
-
-.dashboard-boxes{
-    width: 80%;
-}
-
-.profile {
-    /* justify-content: center; */
 }
 
 .profile-pic img {
@@ -89,20 +158,26 @@ footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    /* width: 100vw; */
-
 }
 .my-rental-item{
-    /* flex: 1 1 24%; */
     flex-grow: 0;
     flex-shrink: 1;
     width: 30%;
-    
 }
-
-.profile-header-text{}
-
 .profile-header{
     display: flex;
     justify-content: center;
+}
+
+
+/* Item Details Page
+-------------------------------------------------- */
+
+.item-details-box{
+    width: 100%;
+    display: flex;
+}
+
+.item-pics{
+    width: 50%;
 }

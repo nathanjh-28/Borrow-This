@@ -2,24 +2,54 @@
 
 
 {% block content %}
-<div class="home-page-container">
-    <section class="welcome">
-        <div class="mx-3">
-            <img src="https://images.unsplash.com/photo-1578357078586-491adf1aa5ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=80" alt="" width="316px">
+{% load static %}
+<div>
+    <section class="hero is-fullheight">
+        <div class="hero-body">
+            <div class=" hero-text">
+                <h1 class="title">
+                    Hello and Welcome to Borrow This!
+                </h1>
+                <h2 class="subtitle">
+                    Where you can post anything 
+                and rent anything!  Click HERE for more information
+                </h2>
+                <div class="buttons">
+                    <button class="mx-3 my-3 cat card button">Camera Gear</button>
+                    <button class="mx-3 my-3 cat card button">Camping Gear</button>
+                    <button class="mx-3 my-3 cat card button">Transportation</button>
+                    <button class="mx-3 my-3 cat card button">Everything Else</button>
+                    <button class="mx-3 my-3 cat card button">Clothing</button>
+                </div>
+            </div>
+            <div class="hero-space"></div>
         </div>
+    </section>
 
-        <div class="box welcome-message mx-3">
-            <p class="mx-3 my-3">Hello and Welcome to Borrow This!  
-                Where you can post anything 
-                and rent anything!  Click here for more information</p>
-                <button class="mx-3 my-3 button">click me</button>
-                <button class="mx-3 my-3 button">click me</button>
-                <button class="mx-3 my-3 button">click me</button>
-                <button class="mx-3 my-3 button">click me</button>
-                <button class="mx-3 my-3 button">click me</button>
-                <button class="mx-3 my-3 button">click me</button>
+    
+    <section class="about-section mt-6" id="about">
+        <div class="box about-text">
+            <h1 class="title">
+                About Borrow This!
+            </h1>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi maxime aut magnam inventore saepe, aliquam eos sit ad autem reprehenderit magni minima quae, laudantium repellendus non omnis cupiditate dolores aperiam. Blanditiis id unde magni similique molestias velit est harum earum incidunt voluptatem quos, ab quaerat tempora rerum pariatur obcaecati iure optio sed, mollitia in, iusto beatae? Commodi atque aspernatur id quibusdam vel quidem odit doloremque dignissimos aliquid, reiciendis quam eum, quasi sed corporis voluptatibus. Tempore quibusdam expedita maxime eius rem deserunt perferendis magnam facere sint dolorum, veritatis quas aliquid nemo tenetur officiis architecto aspernatur porro? Assumenda natus magni fugiat dolores?
+            </p>
         </div>
+    </section>
 
+    <section class="about-section mt-6">
+        <div class="box about-text">
+            <h1 class="title">
+                About Me
+            </h1>
+            <div class="about-body">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi maxime aut magnam inventore saepe, aliquam eos sit ad autem reprehenderit magni minima quae, laudantium repellendus non omnis cupiditate dolores aperiam. Blanditiis id unde magni similique molestias velit est harum earum incidunt voluptatem quos, ab quaerat tempora rerum pariatur obcaecati iure optio sed, mollitia in, iusto beatae? Commodi atque aspernatur id quibusdam vel quidem odit doloremque dignissimos aliquid, reiciendis quam eum, quasi sed corporis voluptatibus. Tempore quibusdam expedita maxime eius rem deserunt perferendis magnam facere sint dolorum, veritatis quas aliquid nemo tenetur officiis architecto aspernatur porro? Assumenda natus magni fugiat dolores?
+            </p>
+            <img src="{% static 'images/nathan.jpg' %}" alt="" width="250px">
+            </div>
+            <p>
+        </div>
     </section>
 </div>
 
