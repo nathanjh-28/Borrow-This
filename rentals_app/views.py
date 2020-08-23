@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 # --------------------------------------------------------- Models, Forms
-from .models import Profile
+from .models import Profile, Rental_Item
 from .forms import ProfileForm, RentalItemForm
 
 
@@ -54,7 +54,11 @@ def dashboard(request):
 # --------------------------------------------------------- Browse
 
 def browse(request):
-    return render(request, 'browse.html')
+    items = Rental_Item.objects.all()
+    context = {
+        'items':items,
+    }
+    return render(request, 'browse.html', context)
 
 # --------------------------------------------------------- User Public
 
@@ -63,8 +67,13 @@ def profile(request):
 
 # --------------------------------------------------------- Item Details
 
-def item_detail(request):
-    return render(request, 'item-details.html')
+def item_detail(request, item_id):
+    item = Rental_Item.objects.get(id=item_id)
+    context = {
+        'item':item
+    }
+
+    return render(request, 'item-details.html', context)
 
 # --------------------------------------------------------- Add Item Form
 

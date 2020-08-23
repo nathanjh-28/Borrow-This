@@ -12,36 +12,37 @@
 </section>
     <section class="br-rental-items">
         <!-- https://stackoverflow.com/questions/1107737/numeric-for-loop-in-django-templates -->
-        {% for i in '0123456789'|make_list %}
+        {#}{% for i in '0123456789'|make_list %}{#}
             {#}{{ forloop.counter}}{#}
+        {% for item in items %}
+        
         <div class="card mx-1 my-1 br-rental-item">
             <div class="card-image">
                 <figure class="image is-4by3">
-                    <img src="https://images.unsplash.com/photo-1570106335104-fd2fe80c632e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=824&q=80" alt="Placeholder image">
+                    <img src={{item.picture}} alt={{item.title}}>
                 </figure>
             </div>
             <div class="card-content">
-                <p class="title is-4">Bicycle</p>
+                <p class="title is-4">{{item.title}}</p>
                 <div class="media">
                     <div class="media-left">
                         <figure class="image is-48x48">
-                            <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="Placeholder image">
+                            <img src={{item.owner.image}} alt="Rental Item Owner">
                         </figure>
                     </div>
                     <div class="media-content">
-                        <p class="subtitle is-6">John Doe</p>
+                        <p class="subtitle is-6">{{item.owner}}</p>
                     </div>
                 </div>
         
                 <div class="content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus nec iaculis mauris.
+                    {{item.description}}
                 </div>
             </div>
             <footer class="card-footer">
-                <p class="mx-3 my-3"> $5/day</p>
-                <a href="{% url 'item_detail' %}"><button class="card-footer-item button is-success my-3 mx-3">Borrow This</button></a>
-              </footer>
+                <p class="mx-3 my-3"> {{item.price}}/day</p>
+                <a href="{% url 'item_detail' item.id %}"><button class="card-footer-item button is-success my-3 mx-3">Borrow This</button></a>
+            </footer>
         </div>
         {% endfor %}
     </section>
