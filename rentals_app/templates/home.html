@@ -2,8 +2,57 @@
 
 
 {% block content %}
-    <header>
-        This is the Home Page for Borrow This
-    </header>
+{% load static %}
+<div>
+    <section class="hero is-fullheight">
+        <div class="hero-body">
+            <div class=" hero-text">
+                <h1 class="title">
+                    Hello and Welcome to Borrow This!
+                </h1>
+                <h2 class="subtitle">
+                    Where you can post anything 
+                and rent anything!  Click HERE for more information
+                </h2>
+                <div class="buttons">
+                    <button class="mx-3 my-3 cat card button">Camera Gear</button>
+                    <button class="mx-3 my-3 cat card button">Camping Gear</button>
+                    <button class="mx-3 my-3 cat card button">Transportation</button>
+                    <button class="mx-3 my-3 cat card button">Everything Else</button>
+                    <button class="mx-3 my-3 cat card button">Clothing</button>
+                </div>
+            </div>
+            <div class="hero-space"></div>
+        </div>
+    </section>
+
+    
+    <section class="about-section mt-6" id="about">
+        <div class="box about-text">
+            <h1 class="title">
+                About Borrow This!
+            </h1>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi maxime aut magnam inventore saepe, aliquam eos sit ad autem reprehenderit magni minima quae, laudantium repellendus non omnis cupiditate dolores aperiam. Blanditiis id unde magni similique molestias velit est harum earum incidunt voluptatem quos, ab quaerat tempora rerum pariatur obcaecati iure optio sed, mollitia in, iusto beatae? Commodi atque aspernatur id quibusdam vel quidem odit doloremque dignissimos aliquid, reiciendis quam eum, quasi sed corporis voluptatibus. Tempore quibusdam expedita maxime eius rem deserunt perferendis magnam facere sint dolorum, veritatis quas aliquid nemo tenetur officiis architecto aspernatur porro? Assumenda natus magni fugiat dolores?
+            </p>
+        </div>
+    </section>
+
+    <section class="about-section mt-6">
+        <div class="box about-text">
+            <h1 class="title">
+                About Me
+            </h1>
+            <div class="about-body">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi maxime aut magnam inventore saepe, aliquam eos sit ad autem reprehenderit magni minima quae, laudantium repellendus non omnis cupiditate dolores aperiam. Blanditiis id unde magni similique molestias velit est harum earum incidunt voluptatem quos, ab quaerat tempora rerum pariatur obcaecati iure optio sed, mollitia in, iusto beatae? Commodi atque aspernatur id quibusdam vel quidem odit doloremque dignissimos aliquid, reiciendis quam eum, quasi sed corporis voluptatibus. Tempore quibusdam expedita maxime eius rem deserunt perferendis magnam facere sint dolorum, veritatis quas aliquid nemo tenetur officiis architecto aspernatur porro? Assumenda natus magni fugiat dolores?
+            </p>
+            <img src="{% static 'images/nathan.jpg' %}" alt="" width="250px">
+            </div>
+            <p>
+        </div>
+    </section>
+</div>
+
+
 
     {% endblock%}
