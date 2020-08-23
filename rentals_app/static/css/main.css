@@ -181,3 +181,10 @@ width: 80%;
 .item-pics{
     width: 50%;
 }
+
+/* SignUp Form Page
+---------------------------------------------------- */
+
+.helptext, .signup-form ul {
+    display: none;
+}
