@@ -1,10 +1,10 @@
-# --------------------------------------------------------- Methods
+# ------------------------------------------------------------------- Methods
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-# --------------------------------------------------------- Auth 
+# ------------------------------------------------------------------- Auth 
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-# --------------------------------------------------------- Models, Forms
+# ------------------------------------------------------------------- Models, Forms
 from .models import Profile, Rental_Item, Reservation
 from .forms import ProfileForm, RentalItemForm, ReservationForm
 
@@ -16,11 +16,11 @@ from .forms import ProfileForm, RentalItemForm, ReservationForm
 #____________________________________________________________________
 
 
-# --------------------------------------------------------- Home
+# ------------------------------------------------------------------- Home
 def home(request):
     return render(request,'home.html')
 
-# --------------------------------------------------------- SignUp Form
+# ------------------------------------------------------------------- SignUp Form
 
 def signup(request):
     error_message = ''
@@ -46,7 +46,7 @@ def signup(request):
     }
     return render(request, 'registration/signup.html', context)
 
-# --------------------------------------------------------- Dashboard
+# ------------------------------------------------------------------- Dashboard
 
 def dashboard(request):
     user = request.user
@@ -61,7 +61,7 @@ def dashboard(request):
     return render(request, 'dashboard.html', context)
         
 
-# --------------------------------------------------------- Browse
+# ------------------------------------------------------------------- Browse
 
 def browse(request):
     items = Rental_Item.objects.all()
@@ -70,7 +70,7 @@ def browse(request):
     }
     return render(request, 'browse.html', context)
 
-# --------------------------------------------------------- User Public
+# ------------------------------------------------------------------- User Public
 
 def profile(request, profile_id):
     profile = Profile.objects.get(id=profile_id)
@@ -81,7 +81,7 @@ def profile(request, profile_id):
     }
     return render(request, 'public-profile.html', context)
 
-# --------------------------------------------------------- Item Details
+# ------------------------------------------------------------------- Item Details
 
 def item_detail(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
@@ -91,7 +91,7 @@ def item_detail(request, item_id):
 
     return render(request, 'item-details.html', context)
 
-# --------------------------------------------------------- Add Item Form
+# ------------------------------------------------------------------- Add Item Form
 
 def add_item (request):
     error_message = ''
@@ -113,7 +113,13 @@ def add_item (request):
     }
     return render(request, 'add-item.html', context)
 
-# --------------------------------------------------------- Add Reservation Form
+# ------------------------------------------------------------------- Delete Item
+
+def item_delete(request, item_id):
+    Rental_Item.objects.get(id=item_id).delete()
+    return redirect('dashboard')
+
+# ------------------------------------------------------------------- Add Reservation Form
 
 def add_rez(request, item_id):
     error_message = ''
@@ -138,7 +144,7 @@ def add_rez(request, item_id):
     }
     return render(request, 'add-reservation.html', context)
 
-# --------------------------------------------------------- Reservation Details
+# ------------------------------------------------------------------- Reservation Details
 
 def rez_detail(request, rez_id):
     reservation = Reservation.objects.get(id=rez_id)
