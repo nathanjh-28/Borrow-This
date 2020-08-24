@@ -1,10 +1,10 @@
-# --------------------------------------------------------- Methods
+# ------------------------------------------------------------------- Methods
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-# --------------------------------------------------------- Auth 
-from django.contrib.auth import login
+# ------------------------------------------------------------------- Auth 
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
-# --------------------------------------------------------- Models, Forms
+# ------------------------------------------------------------------- Models, Forms
 from .models import Profile, Rental_Item, Reservation
 from .forms import ProfileForm, RentalItemForm, ReservationForm
 
@@ -16,11 +16,11 @@ from .forms import ProfileForm, RentalItemForm, ReservationForm
 #____________________________________________________________________
 
 
-# --------------------------------------------------------- Home
+# ------------------------------------------------------------------- Home
 def home(request):
     return render(request,'home.html')
 
-# --------------------------------------------------------- SignUp Form
+# ------------------------------------------------------------------- SignUp Form
 
 def signup(request):
     error_message = ''
@@ -46,7 +46,7 @@ def signup(request):
     }
     return render(request, 'registration/signup.html', context)
 
-# --------------------------------------------------------- Dashboard
+# ------------------------------------------------------------------- Dashboard
 
 def dashboard(request):
     user = request.user
@@ -59,9 +59,46 @@ def dashboard(request):
         'reservations':reservations,
     }
     return render(request, 'dashboard.html', context)
-        
 
-# --------------------------------------------------------- Browse
+# ------------------------------------------------------------------- Edit User Profile
+
+def edit_profile(request, profile_id):
+    error_message = ''
+    user = request.user
+    profile = Profile.objects.get(id=profile_id)
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST, instance=user)
+        if form.is_valid():
+            pform = ProfileForm(request.POST, instance=profile)
+            if pform.is_valid():
+                updated_user = form.save()
+                updated_profile = pform.save()
+                login(request, updated_user)
+                return redirect('dashboard')
+            else:
+                error_message = 'Invalid Profile Edit'
+        else:
+            error_message = 'Invalid User Edit'
+    else:
+        form = UserCreationForm(instance=user)
+        pform = ProfileForm(instance=profile)
+        context = {
+            'error_message':error_message,
+            'form':form,
+            'pform':pform,
+        }
+        return render(request, 'edit-profile.html', context)
+
+# ------------------------------------------------------------------- Delete User Profile
+
+def delete_profile(request):
+    user = request.user
+    logout(request, user)
+    user.delete()
+    return redirect('home')
+
+
+# ------------------------------------------------------------------- Browse
 
 def browse(request):
     items = Rental_Item.objects.all()
@@ -70,7 +107,7 @@ def browse(request):
     }
     return render(request, 'browse.html', context)
 
-# --------------------------------------------------------- User Public
+# ------------------------------------------------------------------- User Public
 
 def profile(request, profile_id):
     profile = Profile.objects.get(id=profile_id)
@@ -81,7 +118,7 @@ def profile(request, profile_id):
     }
     return render(request, 'public-profile.html', context)
 
-# --------------------------------------------------------- Item Details
+# ------------------------------------------------------------------- Item Details
 
 def item_detail(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
@@ -91,7 +128,7 @@ def item_detail(request, item_id):
 
     return render(request, 'item-details.html', context)
 
-# --------------------------------------------------------- Add Item Form
+# ------------------------------------------------------------------- Add Item Form
 
 def add_item (request):
     error_message = ''
@@ -113,7 +150,35 @@ def add_item (request):
     }
     return render(request, 'add-item.html', context)
 
-# --------------------------------------------------------- Add Reservation Form
+# ------------------------------------------------------------------- Edit Item
+
+def item_edit(request, item_id):
+    item = Rental_Item.objects.get(id=item_id)
+    error_message = ''
+    if request.method == 'POST':
+        form = RentalItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('item_detail', item.id)
+        else:
+            error_message = 'invalid'
+    else: 
+        form = RentalItemForm(instance = item)
+        context = {
+            'form':form,
+            'item':item,
+            'error_message':error_message,
+        }
+        return render(request, 'edit-item.html', context)
+
+
+# ------------------------------------------------------------------- Delete Item
+
+def item_delete(request, item_id):
+    Rental_Item.objects.get(id=item_id).delete()
+    return redirect('dashboard')
+
+# ------------------------------------------------------------------- Add Reservation Form
 
 def add_rez(request, item_id):
     error_message = ''
@@ -138,7 +203,7 @@ def add_rez(request, item_id):
     }
     return render(request, 'add-reservation.html', context)
 
-# --------------------------------------------------------- Reservation Details
+# ------------------------------------------------------------------- Reservation Details
 
 def rez_detail(request, rez_id):
     reservation = Reservation.objects.get(id=rez_id)
@@ -146,3 +211,32 @@ def rez_detail(request, rez_id):
         'rez':reservation
     }
     return render(request, 'reservation-detail.html', context)
+
+# ------------------------------------------------------------------- Reservation Edit
+
+def rez_edit(request, rez_id):
+    error_message = ''
+    reservation = Reservation.objects.get(id=rez_id)
+    item = Rental_Item.objects.get(id=reservation.item_id)
+    if request.method == 'POST':
+        form = ReservationForm(request.POST, instance=reservation)
+        if form.is_valid():
+            form.save()
+            return redirect('rez_detail', reservation.id)
+        else:
+            error_message = 'Invalid'
+    else:
+        form = ReservationForm(instance=reservation)
+        context = {
+            'form': form,
+            'item': item,
+            'rez': reservation,
+            'error_message':error_message,
+        }
+        return render(request, 'edit-reservation.html', context)
+
+# ------------------------------------------------------------------- Reservation Delete
+
+def rez_delete(request, rez_id):
+    Reservation.objects.get(id=rez_id).delete()
+    return redirect('browse')
