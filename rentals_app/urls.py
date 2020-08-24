@@ -3,13 +3,13 @@ from . import views
 
 urlpatterns = [
     
-# ---------------------------------------------------------  Home
+# -------------------------------------------------------------------   Home
     
     path('',views.home, name='home'),
 
 #____________________________________________________________________
 
-#_______________________     User Stuff    __________________________
+#____________________________     User     __________________________
 
 #____________________________________________________________________
 
@@ -43,6 +43,10 @@ urlpatterns = [
 
     path('items/<int:item_id>', views.item_detail, name='item_detail'),
 
+# -------------------------------------------------------------------   Item Edit
+
+    path('items/<int:item_id>/edit', views.item_edit, name='item_edit'),
+
 # -------------------------------------------------------------------   Item Delete
 
     path('items/<int:item_id>/delete', views.item_delete, name='item_delete'),
@@ -60,6 +64,15 @@ urlpatterns = [
 # -------------------------------------------------------------------   Reservation Details
 
     path('rez/<int:rez_id>', views.rez_detail, name='rez_detail'),
+
+# -------------------------------------------------------------------   Reservation Edit
+
+    path('rez/<int:rez_id>/edit', views.rez_edit, name='rez_edit'),
+
+# -------------------------------------------------------------------   Reservation Delete
+
+    path('rez/<int:rez_id>/delete', views.rez_delete, name='rez_delete'),
+
 
     # TBD Update Res, Update Item, Update profile
     # TBD page for past reservations rather than on the dashboard

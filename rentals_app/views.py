@@ -113,6 +113,28 @@ def add_item (request):
     }
     return render(request, 'add-item.html', context)
 
+# ------------------------------------------------------------------- Edit Item
+
+def item_edit(request, item_id):
+    item = Rental_Item.objects.get(id=item_id)
+    error_message = ''
+    if request.method == 'POST':
+        form = RentalItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('item_detail', item.id)
+        else:
+            error_message = 'invalid'
+    else: 
+        form = RentalItemForm(instance = item)
+        context = {
+            'form':form,
+            'item':item,
+            'error_message':error_message,
+        }
+        return render(request, 'edit-item.html', context)
+
+
 # ------------------------------------------------------------------- Delete Item
 
 def item_delete(request, item_id):
@@ -152,3 +174,33 @@ def rez_detail(request, rez_id):
         'rez':reservation
     }
     return render(request, 'reservation-detail.html', context)
+
+# ------------------------------------------------------------------- Reservation Edit
+
+
+def rez_edit(request, rez_id):
+    error_message = ''
+    reservation = Reservation.objects.get(id=rez_id)
+    item = Rental_Item.objects.get(id=reservation.item_id)
+    if request.method == 'POST':
+        form = ReservationForm(request.POST, instance=reservation)
+        if form.is_valid():
+            form.save()
+            return redirect('rez_detail', reservation.id)
+        else:
+            error_message = 'Invalid'
+    else:
+        form = ReservationForm(instance=reservation)
+        context = {
+            'form': form,
+            'item': item,
+            'rez': reservation,
+            'error_message':error_message,
+        }
+        return render(request, 'edit-reservation.html', context)
+
+# ------------------------------------------------------------------- Reservation Delete
+
+def rez_delete(request, rez_id):
+    Reservation.objects.get(id=rez_id).delete()
+    return redirect('browse')
