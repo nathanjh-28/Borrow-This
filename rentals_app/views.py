@@ -52,10 +52,11 @@ def dashboard(request):
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
     items = Rental_Item.objects.filter(owner_id=current_profile.id)
+    reservations = Reservation.objects.filter(renter_id=current_profile.id)
     context = {
         'me':current_profile,
         'items': items,
-
+        'reservations':reservations,
     }
     return render(request, 'dashboard.html', context)
         
@@ -139,5 +140,9 @@ def add_rez(request, item_id):
 
 # --------------------------------------------------------- Reservation Details
 
-def rez_detail(request):
-    return render(request, 'reservation-detail.html')
+def rez_detail(request, rez_id):
+    reservation = Reservation.objects.get(id=rez_id)
+    context = {
+        'rez':reservation
+    }
+    return render(request, 'reservation-detail.html', context)

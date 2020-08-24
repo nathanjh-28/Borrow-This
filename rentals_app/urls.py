@@ -37,7 +37,7 @@ urlpatterns = [
 
 # ---------------------------------------------------------  Reservation Details
 
-    path('rez/detail', views.rez_detail, name='rez_detail'),
+    path('rez/<int:rez_id>', views.rez_detail, name='rez_detail'),
 
     # TBD Update Res, Update Item, Update profile
     # TBD page for past reservations rather than on the dashboard
