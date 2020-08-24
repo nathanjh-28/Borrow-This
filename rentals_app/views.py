@@ -4,6 +4,7 @@ from django.http import HttpResponse
 # ------------------------------------------------------------------- Auth 
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 # ------------------------------------------------------------------- Models, Forms
 from .models import Profile, Rental_Item, Reservation
 from .forms import ProfileForm, RentalItemForm, ReservationForm
@@ -48,6 +49,7 @@ def signup(request):
 
 # ------------------------------------------------------------------- Dashboard
 
+@login_required
 def dashboard(request):
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
@@ -62,6 +64,7 @@ def dashboard(request):
 
 # ------------------------------------------------------------------- Edit User Profile
 
+@login_required
 def edit_profile(request, profile_id):
     error_message = ''
     user = request.user
@@ -91,6 +94,7 @@ def edit_profile(request, profile_id):
 
 # ------------------------------------------------------------------- Delete User Profile
 
+@login_required
 def delete_profile(request):
     user = request.user
     logout(request, user)
@@ -130,6 +134,7 @@ def item_detail(request, item_id):
 
 # ------------------------------------------------------------------- Add Item Form
 
+@login_required
 def add_item (request):
     error_message = ''
     if request.method == 'POST':
@@ -152,6 +157,7 @@ def add_item (request):
 
 # ------------------------------------------------------------------- Edit Item
 
+@login_required
 def item_edit(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
     error_message = ''
@@ -174,12 +180,14 @@ def item_edit(request, item_id):
 
 # ------------------------------------------------------------------- Delete Item
 
+@login_required
 def item_delete(request, item_id):
     Rental_Item.objects.get(id=item_id).delete()
     return redirect('dashboard')
 
 # ------------------------------------------------------------------- Add Reservation Form
 
+@login_required
 def add_rez(request, item_id):
     error_message = ''
     item = Rental_Item.objects.get(id=item_id)
@@ -205,6 +213,7 @@ def add_rez(request, item_id):
 
 # ------------------------------------------------------------------- Reservation Details
 
+@login_required
 def rez_detail(request, rez_id):
     reservation = Reservation.objects.get(id=rez_id)
     context = {
@@ -214,6 +223,7 @@ def rez_detail(request, rez_id):
 
 # ------------------------------------------------------------------- Reservation Edit
 
+@login_required
 def rez_edit(request, rez_id):
     error_message = ''
     reservation = Reservation.objects.get(id=rez_id)
@@ -237,6 +247,7 @@ def rez_edit(request, rez_id):
 
 # ------------------------------------------------------------------- Reservation Delete
 
+@login_required
 def rez_delete(request, rez_id):
     Reservation.objects.get(id=rez_id).delete()
     return redirect('browse')
