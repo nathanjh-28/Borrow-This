@@ -17,7 +17,7 @@ urlpatterns = [
 
 # ---------------------------------------------------------  Public Profile
 
-    path('profile/',views.profile,name='profile'),
+    path('profile/<int:profile_id>',views.profile,name='profile'),
 
 # ---------------------------------------------------------  Browse
     

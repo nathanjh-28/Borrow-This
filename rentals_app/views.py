@@ -49,7 +49,16 @@ def signup(request):
 # --------------------------------------------------------- Dashboard
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    user = request.user
+    current_profile = Profile.objects.get(user_id=user.id)
+    items = Rental_Item.objects.filter(owner_id=current_profile.id)
+    context = {
+        'me':current_profile,
+        'items': items,
+
+    }
+    return render(request, 'dashboard.html', context)
+        
 
 # --------------------------------------------------------- Browse
 
@@ -62,8 +71,14 @@ def browse(request):
 
 # --------------------------------------------------------- User Public
 
-def profile(request):
-    return render(request, 'public-profile.html')
+def profile(request, profile_id):
+    profile = Profile.objects.get(id=profile_id)
+    items = Rental_Item.objects.filter(owner_id=profile.id)
+    context = {
+        'profile':profile,
+        'items':items,
+    }
+    return render(request, 'public-profile.html', context)
 
 # --------------------------------------------------------- Item Details
 
@@ -87,7 +102,8 @@ def add_item (request):
             current_profile = Profile.objects.get(user_id=user.id)
             new_item.owner_id = current_profile.id
             new_item.save()
-            return redirect('home')
+            index = new_item.id
+            return redirect('item_detail', index)
         else: error_message = 'Invalid - Try Again'
     form = RentalItemForm
     context = {

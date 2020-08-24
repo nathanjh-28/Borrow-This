@@ -5,7 +5,7 @@ from .models import Profile, Rental_Item
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['email', 'first_name', 'last_name', 'display_name']
+        fields = ['email', 'first_name', 'last_name', 'display_name', 'location','bio']
         email = forms.EmailField()
 
 # ---------------------------------------------------------  Item Form

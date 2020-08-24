@@ -2,6 +2,102 @@
 
 {% block content %}
 
-<h1>This is the profile page</h1>
+<div class="dashboard-page">
 
+    <!-- Profile Info -->
+    <div class="profile-header mt-6">
+        <h3 class="subtitle is-3 profile-header-text">About {{profile.display_name}}</h3>
+    </div>
+    <section class="profile-section">
+        <div class="box profile dashboard-boxes mb-3">
+            <article class="media">
+                <div class="media-left">
+                    <figure class="image profile-pic">
+                        <img src="{{profile.image}}" alt="Image" width="245px" height="245px">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <div class="content">
+                        <p>
+                            <span class="title is-3">{{profile.display_name}}</span> 
+                            
+                            <br>
+                            <span>{{profile.location}}</span>
+                            <br>
+                            {{profile.bio}}
+                        </p>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+    
+    <!-- My Items Section -->
+    <div class="profile-header">
+        <h3 class="subtitle is-3 profile-header-text">Their Items</h3>
+    </div>
+    
+    <section class="my-things">
+        <div class="box dashboard-boxes my-rental-items">
+            {#}{% for i in '012'|make_list %}{#}
+            {% for item in items %}
+            <a href="{% url 'item_detail' item.id %}">
+                <div class="card my-rental-item mx-2 my-2">
+                    <div class="card-image">
+                        <figure class="image ">
+                            <img src={{item.picture}} alt="Placeholder image">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-4">{{item.title}}</p>
+                                <p class="subtitle is-6">{{item.available}}</p>
+                            </div>
+                        </div>
+                        <div class="content">
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+            {% if items|length == 0 %}
+            <div>
+                <p>
+                    No items to borrow
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    
+    <!-- My Reservations Section -->
+    <div class="profile-header">
+        <h3 class="subtitle is-3 profile-header-text">Their Reservations</h3>
+    </div>
+    
+    <section class="my-things">
+        <div class="box dashboard-boxes my-rental-items">
+            {% for i in '012'|make_list %}
+            <div class="card my-rental-item mx-2 mb-2">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img src="https://images.unsplash.com/photo-1570106335104-fd2fe80c632e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=824&q=80" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="title is-4">Bicycle</p>
+                            <p class="subtitle is-6">Oct 10 - 20</p>
+                        </div>
+                    </div>
+                    <div class="content">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
 {% endblock%}

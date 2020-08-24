@@ -11,6 +11,7 @@
     <div class="card mx-3 my-3">
         <div class="card-content">
             <p class="title is-4">{{item.title}}</p>
+            <a href="{% url 'profile' item.owner.id %}">
             <div class="media">
                 <div class="media-left">
                     <figure class="image is-48x48">
@@ -20,7 +21,7 @@
                 <div class="media-content">
                     <p class="subtitle is-6">{{item.owner}}</p>
                 </div>
-            </div>
+            </div></a>
     
             <div class="content">
                 {{item.description}}

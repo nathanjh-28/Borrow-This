@@ -7,7 +7,7 @@
 <div class="browse-page">
 <section class="browse-header my-6">
     <h3 class="subtitle is-3 mx-3 browse-header-child">
-        You are currently looking <span class="has-text-weight-bold">CAMERA GEAR</span>  in  <span class="has-text-weight-bold"> LOS ANGELES </span>
+        You are currently looking at <span class="has-text-weight-bold">ALL ITEMS</span>  in  <span class="has-text-weight-bold"> Bozeman Montana </span>
     </h3>
 </section>
     <section class="br-rental-items">
@@ -17,14 +17,15 @@
         {% for item in items %}
         
         <div class="card mx-1 my-1 br-rental-item">
+            <a href="{% url 'item_detail' item.id %}">
             <div class="card-image">
                 <figure class="image is-4by3">
                     <img src={{item.picture}} alt={{item.title}}>
                 </figure>
-            </div>
+            </div></a>
             <div class="card-content">
                 <p class="title is-4">{{item.title}}</p>
-                <div class="media">
+                <a href="{% url 'profile' item.owner_id %}"><div class="media">
                     <div class="media-left">
                         <figure class="image is-48x48">
                             <img src={{item.owner.image}} alt="Rental Item Owner">
@@ -33,7 +34,7 @@
                     <div class="media-content">
                         <p class="subtitle is-6">{{item.owner}}</p>
                     </div>
-                </div>
+                </div></a>
         
                 <div class="content">
                     {{item.description}}
