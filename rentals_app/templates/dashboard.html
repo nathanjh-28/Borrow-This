@@ -32,6 +32,16 @@
             </article>
         </div>
     </section>
+
+    <div>
+        <a href="{% url 'edit_profile' me.id %}">
+            <button class="button is-info is-outlined">Edit Profile</button>
+        </a>
+        <a href="{% url 'delete_profile' %}">
+            <button class="button is-danger is-outlined">Delete Account</button>
+        </a>
+
+    </div>
     
     <!-- My Items Section -->
     <div class="profile-header">
@@ -43,13 +53,14 @@
         <div class="box dashboard-boxes my-rental-items">
             {#}{% for i in '012'|make_list %}{#}
             {% for item in items %}
-            <a href="{% url 'item_detail' item.id %}">
-                <div class="card my-rental-item mx-2 my-2">
+            <div class="card my-rental-item mx-2 my-2">
+                <a href="{% url 'item_detail' item.id %}">
                     <div class="card-image">
                         <figure class="image ">
                             <img src={{item.picture}} alt="Placeholder image">
                         </figure>
                     </div>
+                </a>
                     <div class="card-content">
                         <div class="media">
                             <div class="media-content">
@@ -61,7 +72,6 @@
                         </div>
                     </div>
                 </div>
-            </a>
             {% endfor %}
             {% if items|length == 0 %}
             <a href="{% url 'add_item' %}">
@@ -94,18 +104,21 @@
     
     <section class="my-things">
         <div class="box dashboard-boxes my-rental-items">
-            {% for i in '012'|make_list %}
+            {#}{% for i in '012'|make_list %}{#}
+            {% for rez in reservations %}
+            <a href="{% url 'rez_detail' rez.id %}">
             <div class="card my-rental-item mx-2 mb-2">
                 <div class="card-image">
                     <figure class="image is-4by3">
-                        <img src="https://images.unsplash.com/photo-1570106335104-fd2fe80c632e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=824&q=80" alt="Placeholder image">
+                        <img src={{rez.item.picture}} alt="Placeholder image">
                     </figure>
                 </div>
+            </a>
                 <div class="card-content">
                     <div class="media">
                         <div class="media-content">
-                            <p class="title is-4">Bicycle</p>
-                            <p class="subtitle is-6">Oct 10 - 20</p>
+                            <p class="title is-4">{{rez.occasion}}</p>
+                            <p class="subtitle is-6">{{rez.start_date}} - {{rez.end_date}}</p>
                         </div>
                     </div>
                     <div class="content">
