@@ -14,21 +14,18 @@
             <article class="media">
                 <div class="media-left">
                     <figure class="image profile-pic">
-                        <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="Image" width="245px" height="245px">
+                        <img src="{{me.image}}" alt="Image" width="245px" height="245px">
                     </figure>
                 </div>
                 <div class="media-content">
                     <div class="content">
                         <p>
-                            <span class="title is-3">John Doe</span> 
+                            <span class="title is-3">{{me.display_name}}</span> 
                             
                             <br>
-                            <span>Austin Texas</span>
+                            <span>{{me.location}}</span>
                             <br>
-                            Bio: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla
-                            egestas. Nullam condimentum luctus turpis.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla
-                            egestas. Nullam condimentum luctus turpis.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla
-                            egestas. Nullam condimentum luctus turpis.
+                            {{me.bio}}
                         </p>
                     </div>
                 </div>
@@ -39,30 +36,54 @@
     <!-- My Items Section -->
     <div class="profile-header">
         <h3 class="subtitle is-3 profile-header-text">My Items</h3>
-        <button class="button is-success mx-3">Add Item</button>
-    </div>
+        <a href="{% url 'add_item' %}"><button class="button is-success mx-3">Add Item</button>
+    </div></a>
     
     <section class="my-things">
         <div class="box dashboard-boxes my-rental-items">
-            {% for i in '012'|make_list %}
-            <div class="card my-rental-item mx-2 my-2">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img src="https://images.unsplash.com/photo-1570106335104-fd2fe80c632e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=824&q=80" alt="Placeholder image">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="media">
-                        <div class="media-content">
-                            <p class="title is-4">Bicycle</p>
-                            <p class="subtitle is-6">status</p>
+            {#}{% for i in '012'|make_list %}{#}
+            {% for item in items %}
+            <a href="{% url 'item_detail' item.id %}">
+                <div class="card my-rental-item mx-2 my-2">
+                    <div class="card-image">
+                        <figure class="image ">
+                            <img src={{item.picture}} alt="Placeholder image">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-4">{{item.title}}</p>
+                                <p class="subtitle is-6">{{item.available}}</p>
+                            </div>
+                        </div>
+                        <div class="content">
                         </div>
                     </div>
-                    <div class="content">
+                </div>
+            </a>
+            {% endfor %}
+            {% if items|length == 0 %}
+            <a href="{% url 'add_item' %}">
+                <div class="card my-rental-item mx-2 my-2">
+                    <div class="card-image">
+                        <figure class="image ">
+                            <img src='https://images.unsplash.com/photo-1557318041-1ce374d55ebf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80' alt="Placeholder image">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-4">Add Item!</p>
+                                <p class="subtitle is-6"></p>
+                            </div>
+                        </div>
+                        <div class="content">
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+            </a>
+            {% endif %}
         </div>
     </section>
     
