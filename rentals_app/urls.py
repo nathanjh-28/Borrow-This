@@ -17,7 +17,7 @@ urlpatterns = [
 
 # ---------------------------------------------------------  Public Profile
 
-    path('profile/',views.profile,name='profile'),
+    path('profile/<int:profile_id>',views.profile,name='profile'),
 
 # ---------------------------------------------------------  Browse
     
@@ -29,7 +29,7 @@ urlpatterns = [
 
 # ---------------------------------------------------------  Item Details
 
-    path('items/detail', views.item_detail, name='item_detail'),
+    path('items/<int:item_id>', views.item_detail, name='item_detail'),
 
 # ---------------------------------------------------------  Add Reservation Form
 

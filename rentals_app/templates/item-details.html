@@ -5,30 +5,31 @@
 <div class="mt-6 box item-details-box">
     
     <div class="item-pics mx-3 my-3">
-        <img src="https://images.unsplash.com/photo-1570106335104-fd2fe80c632e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=824&q=80" alt="Placeholder image">
+        <img src={{item.picture}} alt={{item.title}}>
     </div>
 
     <div class="card mx-3 my-3">
         <div class="card-content">
-            <p class="title is-4">Bicycle</p>
+            <p class="title is-4">{{item.title}}</p>
+            <a href="{% url 'profile' item.owner.id %}">
             <div class="media">
                 <div class="media-left">
                     <figure class="image is-48x48">
-                        <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="Placeholder image">
+                        <img src={{item.owner.image}} alt="Placeholder image">
                     </figure>
                 </div>
                 <div class="media-content">
-                    <p class="subtitle is-6">John Doe</p>
+                    <p class="subtitle is-6">{{item.owner}}</p>
                 </div>
-            </div>
+            </div></a>
     
             <div class="content">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Phasellus nec iaculis mauris.
+                {{item.description}}
+
             </div>
         </div>
         <footer class="card-footer">
-            <p class="mx-3 my-3"> $5/day</p>
+            <p class="mx-3 my-3"> {{item.price}}/day</p>
             <a href="{% url 'add_rez' %}"><button href="" class="card-footer-item button is-success my-3 mx-3">Borrow This</button></a>
         </footer>
     </div>

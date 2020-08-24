@@ -3,13 +3,13 @@
 
 <h1 class="title is-1 mx-6 mt-6">Sign Up</h1>
 
-{% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
 
-<form class="mx-6 mt-6" method="post" action="{% url 'signup' %}">
+<form class="mx-6 mt-6 signup-form" method="post" action="{% url 'signup' %}">
   {% csrf_token %}
   {{ form.as_p }}
   {{ pform.as_p }}
-  <input type="submit" class="btn" value="signup">
+  {% if error_message %}<p class=" my-3 subtitle is-3 has-text-danger">{{ error_message }}</p>{% endif %}
+  <input type="submit" class="button is-success" value="Signup">
 </form>
 
 {% endblock %}

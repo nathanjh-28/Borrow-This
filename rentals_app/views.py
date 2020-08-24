@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 # --------------------------------------------------------- Models, Forms
-from .models import Profile
-from .forms import ProfileForm
+from .models import Profile, Rental_Item
+from .forms import ProfileForm, RentalItemForm
 
 
 #____________________________________________________________________
@@ -49,27 +49,68 @@ def signup(request):
 # --------------------------------------------------------- Dashboard
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    user = request.user
+    current_profile = Profile.objects.get(user_id=user.id)
+    items = Rental_Item.objects.filter(owner_id=current_profile.id)
+    context = {
+        'me':current_profile,
+        'items': items,
+
+    }
+    return render(request, 'dashboard.html', context)
+        
 
 # --------------------------------------------------------- Browse
 
 def browse(request):
-    return render(request, 'browse.html')
+    items = Rental_Item.objects.all()
+    context = {
+        'items':items,
+    }
+    return render(request, 'browse.html', context)
 
 # --------------------------------------------------------- User Public
 
-def profile(request):
-    return render(request, 'public-profile.html')
+def profile(request, profile_id):
+    profile = Profile.objects.get(id=profile_id)
+    items = Rental_Item.objects.filter(owner_id=profile.id)
+    context = {
+        'profile':profile,
+        'items':items,
+    }
+    return render(request, 'public-profile.html', context)
 
 # --------------------------------------------------------- Item Details
 
-def item_detail(request):
-    return render(request, 'item-details.html')
+def item_detail(request, item_id):
+    item = Rental_Item.objects.get(id=item_id)
+    context = {
+        'item':item
+    }
+
+    return render(request, 'item-details.html', context)
 
 # --------------------------------------------------------- Add Item Form
 
 def add_item (request):
-    return render(request, 'add-item.html')
+    error_message = ''
+    if request.method == 'POST':
+        form = RentalItemForm(request.POST)
+        if form.is_valid():
+            new_item = form.save(commit=False)
+            user = request.user
+            current_profile = Profile.objects.get(user_id=user.id)
+            new_item.owner_id = current_profile.id
+            new_item.save()
+            index = new_item.id
+            return redirect('item_detail', index)
+        else: error_message = 'Invalid - Try Again'
+    form = RentalItemForm
+    context = {
+        'form':form,
+        'error_message': error_message
+    }
+    return render(request, 'add-item.html', context)
 
 # --------------------------------------------------------- Add Reservation Form
 

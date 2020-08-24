@@ -7,41 +7,43 @@
 <div class="browse-page">
 <section class="browse-header my-6">
     <h3 class="subtitle is-3 mx-3 browse-header-child">
-        You are currently looking <span class="has-text-weight-bold">CAMERA GEAR</span>  in  <span class="has-text-weight-bold"> LOS ANGELES </span>
+        You are currently looking at <span class="has-text-weight-bold">ALL ITEMS</span>  in  <span class="has-text-weight-bold"> Bozeman Montana </span>
     </h3>
 </section>
     <section class="br-rental-items">
         <!-- https://stackoverflow.com/questions/1107737/numeric-for-loop-in-django-templates -->
-        {% for i in '0123456789'|make_list %}
+        {#}{% for i in '0123456789'|make_list %}{#}
             {#}{{ forloop.counter}}{#}
+        {% for item in items %}
+        
         <div class="card mx-1 my-1 br-rental-item">
+            <a href="{% url 'item_detail' item.id %}">
             <div class="card-image">
                 <figure class="image is-4by3">
-                    <img src="https://images.unsplash.com/photo-1570106335104-fd2fe80c632e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=824&q=80" alt="Placeholder image">
+                    <img src={{item.picture}} alt={{item.title}}>
                 </figure>
-            </div>
+            </div></a>
             <div class="card-content">
-                <p class="title is-4">Bicycle</p>
-                <div class="media">
+                <p class="title is-4">{{item.title}}</p>
+                <a href="{% url 'profile' item.owner_id %}"><div class="media">
                     <div class="media-left">
                         <figure class="image is-48x48">
-                            <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="Placeholder image">
+                            <img src={{item.owner.image}} alt="Rental Item Owner">
                         </figure>
                     </div>
                     <div class="media-content">
-                        <p class="subtitle is-6">John Doe</p>
+                        <p class="subtitle is-6">{{item.owner}}</p>
                     </div>
-                </div>
+                </div></a>
         
                 <div class="content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus nec iaculis mauris.
+                    {{item.description}}
                 </div>
             </div>
             <footer class="card-footer">
-                <p class="mx-3 my-3"> $5/day</p>
-                <a href="{% url 'item_detail' %}"><button class="card-footer-item button is-success my-3 mx-3">Borrow This</button></a>
-              </footer>
+                <p class="mx-3 my-3"> {{item.price}}/day</p>
+                <a href="{% url 'item_detail' item.id %}"><button class="card-footer-item button is-success my-3 mx-3">Borrow This</button></a>
+            </footer>
         </div>
         {% endfor %}
     </section>
