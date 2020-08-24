@@ -14,7 +14,8 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     display_name = models.CharField('Display Name', max_length=50)
-    image = models.URLField(max_length=500,default='https://images.unsplash.com/photo-1506551109886-6101f48c1ab9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80')
+    image = models.URLField(max_length=500,default=
+    'https://images.unsplash.com/photo-1506551109886-6101f48c1ab9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80')
     location = models.CharField(max_length=100)
     bio = models.CharField(max_length=2000)
 
@@ -55,6 +56,21 @@ class Rental_Item(models.Model):
         return self.title
 
 # ---------------------------------------------------------  Reservation Model
+
+class Reservation(models.Model):
+    occasion = models.CharField(max_length=50)
+    renter = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    item = models.ForeignKey(Rental_Item, on_delete=models.CASCADE)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    pick_up = models.DateTimeField()
+    drop_off = models.DateTimeField()
+    picked_up = models.BooleanField(blank=True, null=True)
+    returned_date = models.DateTimeField(blank=True, null=True)
+    approved = models.BooleanField(blank=True, null=True)
+
+    def __str__(self):
+        return self.occasion
 
 # ---------------------------------------------------------  Item_Reviews Model
 

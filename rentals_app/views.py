@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 # --------------------------------------------------------- Models, Forms
-from .models import Profile, Rental_Item
-from .forms import ProfileForm, RentalItemForm
+from .models import Profile, Rental_Item, Reservation
+from .forms import ProfileForm, RentalItemForm, ReservationForm
 
 
 #____________________________________________________________________
@@ -33,8 +33,8 @@ def signup(request):
                 new_profile = profile_form.save(commit=False)
                 new_profile.user_id = user.id
                 new_profile.save()
-            login(request, user)
-            return redirect('home')
+                login(request, user)
+                return redirect('home')
         else:
             error_message = 'Invalid sign up - Try again'
     pform = ProfileForm()
@@ -52,10 +52,11 @@ def dashboard(request):
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
     items = Rental_Item.objects.filter(owner_id=current_profile.id)
+    reservations = Reservation.objects.filter(renter_id=current_profile.id)
     context = {
         'me':current_profile,
         'items': items,
-
+        'reservations':reservations,
     }
     return render(request, 'dashboard.html', context)
         
@@ -104,7 +105,7 @@ def add_item (request):
             new_item.save()
             index = new_item.id
             return redirect('item_detail', index)
-        else: error_message = 'Invalid - Try Again'
+        else: error_message = form.errors
     form = RentalItemForm
     context = {
         'form':form,
@@ -114,10 +115,34 @@ def add_item (request):
 
 # --------------------------------------------------------- Add Reservation Form
 
-def add_rez(request):
-    return render(request, 'add-reservation.html')
+def add_rez(request, item_id):
+    error_message = ''
+    item = Rental_Item.objects.get(id=item_id)
+    user = request.user
+    current_profile = Profile.objects.get(user_id=user.id)
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            new_rez = form.save(commit=False)
+            new_rez.renter_id = current_profile.id
+            new_rez.item_id = item.id
+            new_rez.save()
+            return redirect ('home')
+        else:
+            error_message = 'invalid'
+    form = ReservationForm()
+    context = {
+        'form': form,
+        'item': item,
+        'error_message':error_message,
+    }
+    return render(request, 'add-reservation.html', context)
 
 # --------------------------------------------------------- Reservation Details
 
-def rez_detail(request):
-    return render(request, 'reservation-detail.html')
+def rez_detail(request, rez_id):
+    reservation = Reservation.objects.get(id=rez_id)
+    context = {
+        'rez':reservation
+    }
+    return render(request, 'reservation-detail.html', context)
