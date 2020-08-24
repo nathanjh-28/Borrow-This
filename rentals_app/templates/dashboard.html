@@ -43,13 +43,14 @@
         <div class="box dashboard-boxes my-rental-items">
             {#}{% for i in '012'|make_list %}{#}
             {% for item in items %}
-            <a href="{% url 'item_detail' item.id %}">
-                <div class="card my-rental-item mx-2 my-2">
+            <div class="card my-rental-item mx-2 my-2">
+                <a href="{% url 'item_detail' item.id %}">
                     <div class="card-image">
                         <figure class="image ">
                             <img src={{item.picture}} alt="Placeholder image">
                         </figure>
                     </div>
+                </a>
                     <div class="card-content">
                         <div class="media">
                             <div class="media-content">
@@ -61,7 +62,6 @@
                         </div>
                     </div>
                 </div>
-            </a>
             {% endfor %}
             {% if items|length == 0 %}
             <a href="{% url 'add_item' %}">
@@ -103,6 +103,7 @@
                         <img src={{rez.item.picture}} alt="Placeholder image">
                     </figure>
                 </div>
+            </a>
                 <div class="card-content">
                     <div class="media">
                         <div class="media-content">
@@ -114,7 +115,6 @@
                     </div>
                 </div>
             </div>
-            </a>
             {% endfor %}
         </div>
     </section>
