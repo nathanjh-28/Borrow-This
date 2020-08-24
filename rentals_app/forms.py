@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, Rental_Item
+from .models import Profile, Rental_Item, Reservation
 
 # ---------------------------------------------------------  Profile Form
 class ProfileForm(forms.ModelForm):

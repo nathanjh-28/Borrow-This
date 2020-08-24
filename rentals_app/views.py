@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 # --------------------------------------------------------- Models, Forms
-from .models import Profile, Rental_Item
+from .models import Profile, Rental_Item, Reservation
 from .forms import ProfileForm, RentalItemForm
 
 
