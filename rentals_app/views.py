@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 # ------------------------------------------------------------------- Auth 
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 # ------------------------------------------------------------------- Models, Forms
 from .models import Profile, Rental_Item, Reservation
@@ -59,7 +59,44 @@ def dashboard(request):
         'reservations':reservations,
     }
     return render(request, 'dashboard.html', context)
-        
+
+# ------------------------------------------------------------------- Edit User Profile
+
+def edit_profile(request, profile_id):
+    error_message = ''
+    user = request.user
+    profile = Profile.objects.get(id=profile_id)
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST, instance=user)
+        if form.is_valid():
+            pform = ProfileForm(request.POST, instance=profile)
+            if pform.is_valid():
+                updated_user = form.save()
+                updated_profile = pform.save()
+                login(request, updated_user)
+                return redirect('dashboard')
+            else:
+                error_message = 'Invalid Profile Edit'
+        else:
+            error_message = 'Invalid User Edit'
+    else:
+        form = UserCreationForm(instance=user)
+        pform = ProfileForm(instance=profile)
+        context = {
+            'error_message':error_message,
+            'form':form,
+            'pform':pform,
+        }
+        return render(request, 'edit-profile.html', context)
+
+# ------------------------------------------------------------------- Delete User Profile
+
+def delete_profile(request):
+    user = request.user
+    logout(request, user)
+    user.delete()
+    return redirect('home')
+
 
 # ------------------------------------------------------------------- Browse
 
@@ -176,7 +213,6 @@ def rez_detail(request, rez_id):
     return render(request, 'reservation-detail.html', context)
 
 # ------------------------------------------------------------------- Reservation Edit
-
 
 def rez_edit(request, rez_id):
     error_message = ''

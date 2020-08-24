@@ -32,6 +32,16 @@
             </article>
         </div>
     </section>
+
+    <div>
+        <a href="{% url 'edit_profile' me.id %}">
+            <button class="button is-info is-outlined">Edit Profile</button>
+        </a>
+        <a href="{% url 'delete_profile' %}">
+            <button class="button is-danger is-outlined">Delete Account</button>
+        </a>
+
+    </div>
     
     <!-- My Items Section -->
     <div class="profile-header">

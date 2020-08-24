@@ -25,6 +25,14 @@ urlpatterns = [
 
     path('profile/<int:profile_id>',views.profile,name='profile'),
 
+# ------------------------------------------------------------------- Edit User Profile
+
+    path('profile/<int:profile_id>/edit', views.edit_profile, name='edit_profile'),
+
+# ------------------------------------------------------------------- Delete User Profile
+
+    path('profile/delete', views.delete_profile, name='delete_profile'),
+
 #____________________________________________________________________
 
 #_______________________     ITEMS and BROWSE    ____________________
