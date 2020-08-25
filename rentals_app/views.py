@@ -185,7 +185,11 @@ def item_edit(request, item_id):
 
 @login_required
 def item_delete(request, item_id):
-    Rental_Item.objects.get(id=item_id).delete()
+    item = Rental_Item.objects.get(id=item_id)
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.id is not item.owner_id:
+        return redirect('home')
+    item.delete()
     return redirect('dashboard')
 
 # ------------------------------------------------------------------- Add Reservation Form
@@ -258,5 +262,9 @@ def rez_edit(request, rez_id):
 
 @login_required
 def rez_delete(request, rez_id):
-    Reservation.objects.get(id=rez_id).delete()
+    reservation = Reservation.objects.get(id=rez_id)
+    current_profile = Profile.objects.get(user_id=request.user.id)
+    if current_profile.id is not reservation.renter_id:
+        return redirect ('home')
+    reservation.delete()
     return redirect('browse')
