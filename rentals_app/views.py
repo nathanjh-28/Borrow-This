@@ -10,11 +10,6 @@ from .models import Profile, Rental_Item, Reservation
 from .forms import ProfileForm, RentalItemForm, ReservationForm
 
 
-#____________________________________________________________________
-
-#_______________________     View Functions    ______________________
-
-#____________________________________________________________________
 
 
 # ------------------------------------------------------------------- Home
@@ -52,7 +47,7 @@ def signup(request):
 @login_required
 def dashboard(request):
     user = request.user
-    current_profile = Profile.objects.get(user_id=user.id)
+    current_profile = Profile.objects.get(user_id=request.user.id)
     items = Rental_Item.objects.filter(owner_id=current_profile.id)
     reservations = Reservation.objects.filter(renter_id=current_profile.id)
     context = {
@@ -69,6 +64,8 @@ def edit_profile(request, profile_id):
     error_message = ''
     user = request.user
     profile = Profile.objects.get(id=profile_id)
+    if user.id is not profile.user_id:
+        return redirect('home')
     if request.method == 'POST':
         form = UserCreationForm(request.POST, instance=user)
         if form.is_valid():
@@ -126,8 +123,11 @@ def profile(request, profile_id):
 
 def item_detail(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
+    user = request.user
+    current_profile = Profile.objects.get(user_id=user.id)
     context = {
-        'item':item
+        'item':item,
+        'current_profile':current_profile,
     }
 
     return render(request, 'item-details.html', context)
@@ -160,6 +160,9 @@ def add_item (request):
 @login_required
 def item_edit(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.id is not item.owner_id:
+        return redirect('home')
     error_message = ''
     if request.method == 'POST':
         form = RentalItemForm(request.POST, instance=item)
@@ -215,9 +218,12 @@ def add_rez(request, item_id):
 
 @login_required
 def rez_detail(request, rez_id):
+    user = request.user
+    current_profile = Profile.objects.get(user_id=user.id)
     reservation = Reservation.objects.get(id=rez_id)
     context = {
-        'rez':reservation
+        'rez':reservation,
+        'current_profile':current_profile,
     }
     return render(request, 'reservation-detail.html', context)
 
@@ -228,6 +234,9 @@ def rez_edit(request, rez_id):
     error_message = ''
     reservation = Reservation.objects.get(id=rez_id)
     item = Rental_Item.objects.get(id=reservation.item_id)
+    current_profile = Profile.objects.get(user_id=request.user.id)
+    if current_profile.id is not reservation.renter_id:
+        return redirect ('home')
     if request.method == 'POST':
         form = ReservationForm(request.POST, instance=reservation)
         if form.is_valid():
