@@ -7,10 +7,15 @@
     <title>Borrow This</title>
     <!-- Bulma CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <!-- Bulma Calendar Extension -->
+    <link href="{% static 'bulma-calendar/dist/css/bulma-calendar.min.css' %}" rel="stylesheet">
     <!-- Main CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <!-- Bulma Calendar Extension JS -->
+    <script defer src="{% static 'bulma-calendar/dist/js/bulma-calendar.min.js' %}"></script>
     <!-- APP JS -->
     <script defer src="{%static 'js/app.js' %}"></script>
+
 </head>
 <body class="has-navbar-fixed-top">
     <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
