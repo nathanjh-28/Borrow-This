@@ -83,6 +83,14 @@ urlpatterns = [
     path('rez/<int:rez_id>/delete', views.rez_delete, name='rez_delete'),
 
 
+
+
+# -------------------------------------------------------------------   Test
+
+    path('test/<int:item_id>', views.test, name='test'),
+
+
+
     # TBD Update Res, Update Item, Update profile
     # TBD page for past reservations rather than on the dashboard
 
