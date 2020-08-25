@@ -10,7 +10,7 @@ from .models import Profile, Rental_Item, Reservation
 from .forms import ProfileForm, RentalItemForm, ReservationForm
 
 
-from .validators import get_reservations, validate_date_range
+from .validators import get_reservations, validate_date_range, validate_dates
 
 
 
@@ -203,40 +203,17 @@ def add_rez(request, item_id):
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
     if request.method == 'POST':
-        # print(f""" 
-        # req.post.occasion = 
-        # {request.POST['occasion']}
-        # """)
-        # start = int(request.POST['start_date'])
-        # end = int(request.POST['end_date'])
-        # print('here is my log')
-        # print(type(start))
-        # print(start)
-        # print('end log')
-        # if validate_date_range(item_id,start,end):
-        #     print('good to go')
-        # else:
-        #     print('no way jose')
         form = ReservationForm(request.POST)
-        # print(form)
         if form.is_valid():
             new_rez = form.save(commit=False)
             new_rez.renter_id = current_profile.id
             new_rez.item_id = item.id
-            # print('nathan start')
-            # print(type(new_rez.start_date))
-            # print('nathan end')
-        #     print(f"""
-        #     new rez created: 
-        #     {new_rez.item_id}
-        #     {new_rez.start_date}
-        #     {new_rez.end_date}
-        #     """)
             if validate_date_range(item_id,new_rez.start_date,new_rez.end_date):
-                new_rez.save()
-                return redirect ('home')
+                if validate_dates(new_rez.start_date,new_rez.end_date):
+                    new_rez.save()
+                    return redirect ('home')
             else:
-                error_message = 'Conflicting Dates'
+                error_message = 'Sorry!  Those dates overlap with a current reservation!'
                 new_rez.save()
                 new_rez.delete()
                 context_err = {
@@ -245,8 +222,7 @@ def add_rez(request, item_id):
                     'error_message':error_message,
                     }
                 return render(request, 'add-reservation.html', context_err)
-        # else:
-        #     error_message = 'invalid submission'
+        error_message = 'invalid submission'
     form = ReservationForm()
     context = {
         'form': form,

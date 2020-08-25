@@ -1,6 +1,8 @@
 console.log('borrow me!')
 
-// import bulmaCalendar from '../bulma-calendar/dist/js/bulma-calendar.min.js'
+// Docs for bulma calendar pop up:
+// https://demo.creativebulma.net/components/calendar/
+
 
 // Initialize all input of date type.
 const calendars = bulmaCalendar.attach('[type="date"]');

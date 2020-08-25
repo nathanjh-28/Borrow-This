@@ -20,3 +20,9 @@ def validate_date_range(item_id, start_date, end_date):
             if start_date <= booking.end_date:
                 return False
     return True
+
+def validate_dates(start_date, end_date):
+    if start_date > end_date:
+        return False
+    return True
+
