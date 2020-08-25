@@ -199,6 +199,7 @@ def item_delete(request, item_id):
 @login_required
 def add_rez(request, item_id):
     error_message = ''
+    form = ReservationForm()
     item = Rental_Item.objects.get(id=item_id)
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
@@ -212,6 +213,16 @@ def add_rez(request, item_id):
                 if validate_dates(new_rez.start_date,new_rez.end_date):
                     new_rez.save()
                     return redirect ('home')
+                else:
+                    error_message = 'Your start date must be before your end date'
+                    new_rez.save()
+                    new_rez.delete()
+                    context_err = {
+                    'form': form,
+                    'item': item,
+                    'error_message':error_message,
+                    }
+                    return render(request, 'add-reservation.html', context_err)
             else:
                 error_message = 'Sorry!  Those dates overlap with a current reservation!'
                 new_rez.save()
@@ -222,8 +233,7 @@ def add_rez(request, item_id):
                     'error_message':error_message,
                     }
                 return render(request, 'add-reservation.html', context_err)
-        error_message = 'invalid submission'
-    form = ReservationForm()
+        else: error_message = 'invalid submission'
     context = {
         'form': form,
         'item': item,
