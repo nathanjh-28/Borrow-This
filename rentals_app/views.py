@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 # ------------------------------------------------------------------- Models, Forms
-from .models import Profile, Rental_Item, Reservation
+from .models import Profile, Rental_Item, Reservation, Location, Category
 from .forms import ProfileForm, RentalItemForm, ReservationForm
 
 
@@ -104,11 +104,64 @@ def delete_profile(request):
 # ------------------------------------------------------------------- Browse
 
 def browse(request):
+    locations = Location.objects.all()
+    categories = Category.objects.all()
     items = Rental_Item.objects.all()
     context = {
         'items':items,
+        'cats': categories,
+        'locs':locations,
     }
     return render(request, 'browse.html', context)
+
+# ------------------------------------------------------------------- Browse By Category
+
+def browse_cat(request, cat_id):
+    this_cat = Category.objects.get(id=cat_id)
+    items = Rental_Item.objects.filter(category_id=cat_id)
+    locations = Location.objects.all()
+    categories = Category.objects.all()
+    context = {
+        'this_cat':this_cat,
+        'items':items,
+        'cats': categories,
+        'locs':locations,
+    }
+    return render(request, 'browse.html', context)
+
+# ------------------------------------------------------------------- Browse By Location
+
+
+def browse_loc(request, loc_id):
+    this_loc = Location.objects.get(id=loc_id)
+    items = Rental_Item.objects.filter(location_id=loc_id)
+    locations = Location.objects.all()
+    categories = Category.objects.all()
+    context = {
+        'items':items,
+        'this_loc':this_loc,
+        'cats': categories,
+        'locs':locations,
+    }
+    return render(request,'browse.html', context)
+
+# ------------------------------------------------------------------- Browse By Cat and Loc
+
+
+def browse_loc_cat(request, loc_id, cat_id):
+    this_loc = Location.objects.get(id=loc_id)
+    this_cat = Category.objects.get(id=cat_id)
+    items = Rental_Item.objects.filter(location_id=loc_id, category_id=cat_id)
+    locations = Location.objects.all()
+    categories = Category.objects.all()
+    context = {
+        'items':items,
+        'this_loc':this_loc,
+        'this_cat':this_cat,
+        'cats': categories,
+        'locs':locations,
+    }
+    return render(request,'browse.html', context)
 
 # ------------------------------------------------------------------- User Public
 

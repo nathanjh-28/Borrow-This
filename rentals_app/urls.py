@@ -43,6 +43,12 @@ urlpatterns = [
     
     path('browse/', views.browse, name='browse'),
 
+    path('browse/<int:cat_id>', views.browse_cat, name='browse_cat'),
+
+    path('browse/loc/<int:loc_id>', views.browse_loc, name='browse_loc'),
+
+    path('browse/loc/<int:loc_id>/cat/<int:cat_id>', views.browse_loc_cat, name='browse_loc_cat'),
+
 # -------------------------------------------------------------------   Add Item Form
 
     path('items/new', views.add_item, name='add_item'),
