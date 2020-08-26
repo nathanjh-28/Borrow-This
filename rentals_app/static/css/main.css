@@ -145,6 +145,11 @@ width: 80%;
     flex-direction: column;
 }
 
+.edit-delete-account{
+    display: flex;
+    justify-content: flex-end;
+}
+
 .profile-section {
     display:flex;
     justify-content: center;

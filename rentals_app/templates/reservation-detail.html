@@ -33,10 +33,12 @@
     </p>
     <a href="{% url 'item_detail' rez.item.id %}">
         <button class="button is-success is-outlined">Item</button></a>
+        {% if current_profile.id == rez.renter.id %}
     <a href="{% url 'rez_edit' rez.id %}">
         <button class="button is-info">Edit</button></a>
     <a href="{% url 'rez_delete' rez.id %}">
         <button class="button is-danger">Delete</button></a>
+        {% endif %}
 
 </div>
 {% endblock%}

@@ -4,10 +4,16 @@ from django.db import models
 from django.urls import reverse
 from datetime import date
 
-# ---------------------------------------------------------  Django User Model
+#--- my validators
+# from .validators import validate_date_range
+
+from django.core.exceptions import ValidationError
+
+
+# -------------------------------------------------------------------  Django User Model
 from django.contrib.auth.models import User
 
-# ---------------------------------------------------------  Profile Model
+# -------------------------------------------------------------------  Profile Model
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email = models.EmailField(max_length=254)
@@ -21,19 +27,19 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.display_name
-# ---------------------------------------------------------  Location Model
+# -------------------------------------------------------------------  Location Model
 class Location(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
-# ---------------------------------------------------------  Category Model
+# -------------------------------------------------------------------  Category Model
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
-# ---------------------------------------------------------  Rental Item Model
+# -------------------------------------------------------------------  Rental Item Model
 
 class Rental_Item(models.Model):
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -55,7 +61,7 @@ class Rental_Item(models.Model):
     def __str__(self):
         return self.title
 
-# ---------------------------------------------------------  Reservation Model
+# -------------------------------------------------------------------  Reservation Model
 
 class Reservation(models.Model):
     occasion = models.CharField(max_length=50)
@@ -63,17 +69,49 @@ class Reservation(models.Model):
     item = models.ForeignKey(Rental_Item, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
-    pick_up = models.DateTimeField()
-    drop_off = models.DateTimeField()
+    pick_up = models.DateTimeField('Choose a pick up day and time', blank=True, null=True)
+    drop_off = models.DateTimeField('Choose a drop off day and time', blank=True, null=True)
     picked_up = models.BooleanField(blank=True, null=True)
     returned_date = models.DateTimeField(blank=True, null=True)
     approved = models.BooleanField(blank=True, null=True)
 
     def __str__(self):
-        return self.occasion
+        return f"""
+        Occasion: {self.occasion},
+        Renter: {self.renter.display_name},
+        Item: {self.item.title},
+        Start:{self.start_date} 
+        to 
+        End {self.end_date}
+        """
 
-# ---------------------------------------------------------  Item_Reviews Model
+    # def clean():
+    #     if not validate_date_range(self.item_id, self.start_date, self.end_date):
+    #         raise ValidationError(_('Dates Conflict.  The dates you selected overlap with a preexisting reservation'))
+    
+    # def clean(self):
+    #     rez_list = Reservation.objects.filter(item_id=self.item_id)
+    #     for booking in rez_list:
+    #         if self.end_date >= booking.start_date:
+    #             if self.start_date <= booking.end_date:
+    #                     raise ValidationError(_('Dates Conflict.  The dates you selected overlap with a preexisting reservation'))
 
-# ---------------------------------------------------------  User_Reviews Model
 
 
+
+
+# -------------------------------------------------------------------  Item_Reviews Model
+
+# -------------------------------------------------------------------  User_Reviews Model
+
+
+# def validate_date_range(item_id, start_date, end_date):
+#     rez_list = Reservation.objects.filter(item_id=item_id)
+#     for booking in rez_list:
+#         if end_date >= booking.start_date:
+#             if start_date <= booking.end_date:
+#                 return False
+#             else:
+#                 return True
+#         else:
+#             return True

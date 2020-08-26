@@ -32,6 +32,7 @@
             <p class="mx-3 my-3"> {{item.price}}/day</p>
             <a href="{% url 'add_rez' item.id %}"><button href="" class="card-footer-item button is-success my-3 mx-3">Borrow This</button></a>
         </footer>
+        {% if current_profile.id == item.owner_id %}
         <footer class="card-footer">
             <a href="{% url 'item_edit' item.id %}">
                 <button class="card-footer-item button is-info my-3 mx-3">Edit</button>
@@ -40,6 +41,7 @@
                 <button class="card-footer-item button is-danger my-3 mx-3">Delete</button>
             </a>
         </footer>
+        {% endif %}
     </div>
 </div>
 

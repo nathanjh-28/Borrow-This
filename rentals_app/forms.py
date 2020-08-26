@@ -1,6 +1,16 @@
 from django import forms
 from .models import Profile, Rental_Item, Reservation
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+class DateTimeInput(forms.DateTimeInput):
+    input_type = 'datetime-local'
+
+# -- https://stackoverflow.com/questions/22846048/django-form-as-p-datefield-not-showing-input-type-as-date
+
+# -- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime#:~:text=The%20HTML%20%3Cinput%20type%3D%22,no%20longer%20supported%20in%20browsers.
+
 # ---------------------------------------------------------  Profile Form
 class ProfileForm(forms.ModelForm):
     bio = forms.CharField(widget=forms.Textarea)
@@ -19,7 +29,6 @@ class RentalItemForm(forms.ModelForm):
 # ---------------------------------------------------------  Reservation Form
 
 class ReservationForm(forms.ModelForm):
-    start_date = forms.DateField(widget=forms.DateInput)
     # occasion = forms.CharField(widget=forms.TextInput(attrs={'class': 'special'}))
     class Meta:
         model = Reservation
@@ -27,7 +36,11 @@ class ReservationForm(forms.ModelForm):
         widgets = {
             'occasion': forms.TextInput(attrs = {
                 'class':'occasion-input'
-                })
+                }),
+            'start_date': DateInput(),
+            'end_date': DateInput(),
+            'pick_up': DateTimeInput(),
+            'drop_off': DateTimeInput(),
         }
 
 
