@@ -4,16 +4,14 @@ from django.http import HttpResponse
 # ------------------------------------------------------------------- Auth 
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 # ------------------------------------------------------------------- Models, Forms
 from .models import Profile, Rental_Item, Reservation
 from .forms import ProfileForm, RentalItemForm, ReservationForm
 
 
-#____________________________________________________________________
+from .validators import get_reservations, validate_date_range, validate_dates, validate_date_range_update
 
-#_______________________     View Functions    ______________________
-
-#____________________________________________________________________
 
 
 # ------------------------------------------------------------------- Home
@@ -48,9 +46,10 @@ def signup(request):
 
 # ------------------------------------------------------------------- Dashboard
 
+@login_required
 def dashboard(request):
     user = request.user
-    current_profile = Profile.objects.get(user_id=user.id)
+    current_profile = Profile.objects.get(user_id=request.user.id)
     items = Rental_Item.objects.filter(owner_id=current_profile.id)
     reservations = Reservation.objects.filter(renter_id=current_profile.id)
     context = {
@@ -62,10 +61,13 @@ def dashboard(request):
 
 # ------------------------------------------------------------------- Edit User Profile
 
+@login_required
 def edit_profile(request, profile_id):
     error_message = ''
     user = request.user
     profile = Profile.objects.get(id=profile_id)
+    if user.id is not profile.user_id:
+        return redirect('home')
     if request.method == 'POST':
         form = UserCreationForm(request.POST, instance=user)
         if form.is_valid():
@@ -91,6 +93,7 @@ def edit_profile(request, profile_id):
 
 # ------------------------------------------------------------------- Delete User Profile
 
+@login_required
 def delete_profile(request):
     user = request.user
     logout(request, user)
@@ -122,14 +125,18 @@ def profile(request, profile_id):
 
 def item_detail(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
+    user = request.user
+    current_profile = Profile.objects.get(user_id=user.id)
     context = {
-        'item':item
+        'item':item,
+        'current_profile':current_profile,
     }
 
     return render(request, 'item-details.html', context)
 
 # ------------------------------------------------------------------- Add Item Form
 
+@login_required
 def add_item (request):
     error_message = ''
     if request.method == 'POST':
@@ -152,8 +159,12 @@ def add_item (request):
 
 # ------------------------------------------------------------------- Edit Item
 
+@login_required
 def item_edit(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.id is not item.owner_id:
+        return redirect('home')
     error_message = ''
     if request.method == 'POST':
         form = RentalItemForm(request.POST, instance=item)
@@ -174,14 +185,21 @@ def item_edit(request, item_id):
 
 # ------------------------------------------------------------------- Delete Item
 
+@login_required
 def item_delete(request, item_id):
-    Rental_Item.objects.get(id=item_id).delete()
+    item = Rental_Item.objects.get(id=item_id)
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.id is not item.owner_id:
+        return redirect('home')
+    item.delete()
     return redirect('dashboard')
 
 # ------------------------------------------------------------------- Add Reservation Form
 
+@login_required
 def add_rez(request, item_id):
     error_message = ''
+    form = ReservationForm()
     item = Rental_Item.objects.get(id=item_id)
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
@@ -191,11 +209,31 @@ def add_rez(request, item_id):
             new_rez = form.save(commit=False)
             new_rez.renter_id = current_profile.id
             new_rez.item_id = item.id
-            new_rez.save()
-            return redirect ('home')
-        else:
-            error_message = 'invalid'
-    form = ReservationForm()
+            if validate_date_range(item_id,new_rez.start_date,new_rez.end_date):
+                if validate_dates(new_rez.start_date,new_rez.end_date):
+                    new_rez.save()
+                    return redirect ('home')
+                else:
+                    error_message = 'Your start date must be before your end date'
+                    new_rez.save()
+                    new_rez.delete()
+                    context_err = {
+                    'form': form,
+                    'item': item,
+                    'error_message':error_message,
+                    }
+                    return render(request, 'add-reservation.html', context_err)
+            else:
+                error_message = 'Sorry!  Those dates overlap with a current reservation!'
+                new_rez.save()
+                new_rez.delete()
+                context_err = {
+                    'form': form,
+                    'item': item,
+                    'error_message':error_message,
+                    }
+                return render(request, 'add-reservation.html', context_err)
+        else: error_message = 'invalid submission'
     context = {
         'form': form,
         'item': item,
@@ -205,38 +243,67 @@ def add_rez(request, item_id):
 
 # ------------------------------------------------------------------- Reservation Details
 
+@login_required
 def rez_detail(request, rez_id):
+    user = request.user
+    current_profile = Profile.objects.get(user_id=user.id)
     reservation = Reservation.objects.get(id=rez_id)
     context = {
-        'rez':reservation
+        'rez':reservation,
+        'current_profile':current_profile,
     }
     return render(request, 'reservation-detail.html', context)
 
 # ------------------------------------------------------------------- Reservation Edit
 
+@login_required
 def rez_edit(request, rez_id):
     error_message = ''
     reservation = Reservation.objects.get(id=rez_id)
     item = Rental_Item.objects.get(id=reservation.item_id)
+    current_profile = Profile.objects.get(user_id=request.user.id)
+    if current_profile.id is not reservation.renter_id:
+        return redirect ('home')
     if request.method == 'POST':
         form = ReservationForm(request.POST, instance=reservation)
         if form.is_valid():
-            form.save()
-            return redirect('rez_detail', reservation.id)
+            updated_rez = form.save(commit=False)
+            a = updated_rez.item_id
+            b = updated_rez.start_date
+            c = updated_rez.end_date
+            if validate_date_range_update(rez_id,a,b,c):
+                if validate_dates (b,c):
+                    updated_rez.save()
+                    return redirect('rez_detail', rez_id)
+                else:
+                    error_message = 'Start Date must occur before End Date'
+            else:
+                error_message = 'Conflicting Dates'
         else:
             error_message = 'Invalid'
-    else:
-        form = ReservationForm(instance=reservation)
-        context = {
-            'form': form,
-            'item': item,
-            'rez': reservation,
-            'error_message':error_message,
-        }
-        return render(request, 'edit-reservation.html', context)
+    form = ReservationForm(instance=reservation)
+    context = {
+        'form': form,
+        'item': item,
+        'rez': reservation,
+        'error_message':error_message,
+    }
+    return render(request, 'edit-reservation.html', context)
 
 # ------------------------------------------------------------------- Reservation Delete
 
+@login_required
 def rez_delete(request, rez_id):
-    Reservation.objects.get(id=rez_id).delete()
+    reservation = Reservation.objects.get(id=rez_id)
+    current_profile = Profile.objects.get(user_id=request.user.id)
+    if current_profile.id is not reservation.renter_id:
+        return redirect ('home')
+    reservation.delete()
     return redirect('browse')
+
+# ------------------------------------------------------------------- Test
+
+def test(request, item_id):
+    # msg = 'hello world'
+    # return HttpResponse(msg)
+    return HttpResponse(get_reservations(item_id))
