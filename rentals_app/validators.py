@@ -26,3 +26,10 @@ def validate_dates(start_date, end_date):
         return False
     return True
 
+def validate_date_range_update(rez_id, item_id, start_date, end_date):
+    rez_list = Reservation.objects.filter(item_id=item_id).exclude(id=rez_id)
+    for booking in rez_list:
+        if end_date >= booking.start_date:
+            if start_date <= booking.end_date:
+                return False
+    return True

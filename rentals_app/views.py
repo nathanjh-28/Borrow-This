@@ -10,7 +10,7 @@ from .models import Profile, Rental_Item, Reservation
 from .forms import ProfileForm, RentalItemForm, ReservationForm
 
 
-from .validators import get_reservations, validate_date_range, validate_dates
+from .validators import get_reservations, validate_date_range, validate_dates, validate_date_range_update
 
 
 
@@ -267,19 +267,28 @@ def rez_edit(request, rez_id):
     if request.method == 'POST':
         form = ReservationForm(request.POST, instance=reservation)
         if form.is_valid():
-            form.save()
-            return redirect('rez_detail', reservation.id)
+            updated_rez = form.save(commit=False)
+            a = updated_rez.item_id
+            b = updated_rez.start_date
+            c = updated_rez.end_date
+            if validate_date_range_update(rez_id,a,b,c):
+                if validate_dates (b,c):
+                    updated_rez.save()
+                    return redirect('rez_detail', rez_id)
+                else:
+                    error_message = 'Start Date must occur before End Date'
+            else:
+                error_message = 'Conflicting Dates'
         else:
             error_message = 'Invalid'
-    else:
-        form = ReservationForm(instance=reservation)
-        context = {
-            'form': form,
-            'item': item,
-            'rez': reservation,
-            'error_message':error_message,
-        }
-        return render(request, 'edit-reservation.html', context)
+    form = ReservationForm(instance=reservation)
+    context = {
+        'form': form,
+        'item': item,
+        'rez': reservation,
+        'error_message':error_message,
+    }
+    return render(request, 'edit-reservation.html', context)
 
 # ------------------------------------------------------------------- Reservation Delete
 
