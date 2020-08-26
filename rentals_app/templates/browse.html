@@ -6,7 +6,7 @@
 
 <div class="browse-page">
 <section class="browse-header my-6">
-    <h3 class="subtitle is-3 mx-3 browse-header-child">
+    <h3 class="subtitle is-4 mx-3 browse-header-child">
         You are currently looking at 
         
         
@@ -25,6 +25,17 @@
             </div>
             <div class="dropdown-menu" id="dropdown-menu" role="menu">
                 <div class="dropdown-content">
+                    {% if this_cat and this_loc %}
+                    <a href="{% url 'browse_loc' this_loc.id %}"
+                    class="dropdown-item">
+                        All Categories
+                    </a>
+                    {% elif this_cat %}
+                    <a href="{% url 'browse' %}"
+                    class="dropdown-item">
+                        All Categories
+                    </a>
+                    {% endif %}
                     {% for cat in cats %}
                     {% if this_loc %}
                     <a href="{% url 'browse_loc_cat' loc_id=this_loc.id cat_id=cat.id %}"
@@ -58,6 +69,17 @@
             </div>
             <div class="dropdown-menu" id="dropdown-menu" role="menu">
                 <div class="dropdown-content">
+                {% if this_loc and this_cat %}
+                <a href="{% url 'browse_cat' this_cat.id %}"
+                class="dropdown-item">
+                    All Locations
+                </a>
+                {% elif this_loc %}
+                <a href="{% url 'browse' %}"
+                class="dropdown-item">
+                All Locations
+            </a>
+                {% endif %}
                 {% for loc in locs %}
                 {% if this_cat %}
                 <a href="{% url 'browse_loc_cat' loc.id this_cat.id %}" class="dropdown-item">
