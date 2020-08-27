@@ -56,11 +56,13 @@ def dashboard(request):
     for item in items:
         item_ids.append(item.id)
     myreservations = Reservation.objects.filter(item_id__in=item_ids)
+    needs_approval = myreservations.filter(approved=False)
     context = {
         'me':current_profile,
         'items': items,
         'reservations':reservations,
         'myreservations':myreservations,
+        'needs_approval':needs_approval,
     }
     return render(request, 'dashboard.html', context)
 
@@ -321,6 +323,8 @@ def rez_edit(request, rez_id):
     item = Rental_Item.objects.get(id=reservation.item_id)
     current_profile = Profile.objects.get(user_id=request.user.id)
     if current_profile.id is not reservation.renter_id:
+        return redirect ('home')
+    if reservation.approved:
         return redirect ('home')
     if request.method == 'POST':
         form = ReservationForm(request.POST, instance=reservation)
