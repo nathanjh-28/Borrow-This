@@ -98,6 +98,8 @@ urlpatterns = [
 
     path('items/<int:item_id>/review/new', views.add_review, name='add_review'),
 
+    path('reviews/<int:rev_id>', views.delete_review, name='delete_review'),
+
 
 
 # -------------------------------------------------------------------   Test

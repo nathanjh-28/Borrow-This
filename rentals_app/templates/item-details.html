@@ -87,6 +87,10 @@
         </p>
         <p>
             {{rev.body}}
+            {% if current_profile.id == rev.author_id %}
+            <a href="" class="button is-small is-info is-outlined">edit</a>
+            <a href="{% url 'delete_review' rev.id %}" class="button is-small is-danger is-outlined">delete</a>
+            {% endif %}
         </p>
         <hr>
 
@@ -101,3 +105,4 @@
 
 
 {% endblock%}
+

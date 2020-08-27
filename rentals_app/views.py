@@ -415,6 +415,7 @@ def rez_delete(request, rez_id):
 
 
 # ------------------------------------------------------------------- Add Review
+@login_required
 def add_review(request, item_id):
     error_message = ''
     item = Rental_Item.objects.get(id=item_id)
@@ -437,8 +438,18 @@ def add_review(request, item_id):
     }
     return render(request, 'add-review.html', context)
 
-
-
+# ------------------------------------------------------------------- Delete Review
+@login_required
+def delete_review(request, rev_id):
+    user = request.user
+    profile = Profile.objects.get(user_id=user.id)
+    review = Review.objects.get(id=rev_id)
+    item = Rental_Item.objects.get(id=review.item_id)
+    if review.author_id is not profile.id:
+        return redirect('home')
+    else:
+        review.delete()
+        return redirect('item_detail', item.id)
 
 
 # ------------------------------------------------------------------- Test
