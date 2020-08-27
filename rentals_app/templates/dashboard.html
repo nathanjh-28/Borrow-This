@@ -158,7 +158,11 @@
             {#}{% for i in '012'|make_list %}{#}
             {% for rez in myreservations %}
             <a href="{% url 'rez_detail' rez.id %}">
-                <div class="card my-rental-item mx-2 mb-2">
+                <div class="card my-rental-item mx-2 mb-2
+                {% if rez.ready_for_pickup %}
+                is-ready
+                {% endif %}
+                ">
                     <div class="card-image">
                         <figure class="image is-4by3">
                             <img src={{rez.item.picture}} alt="Placeholder image">
@@ -170,6 +174,7 @@
                     <div class="media-content">
                         <p class="title is-4">{{rez.occasion}}</p>
                         <p class="subtitle is-6">{{rez.start_date}} - {{rez.end_date}}</p>
+
                         {% if not rez.approved %}
                         <a href="{% url 'rez_edit_owner' rez.id %}"class="is-danger button subtitle is-6">Needs Approval</a>
                         {% else %}
