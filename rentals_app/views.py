@@ -419,17 +419,17 @@ def add_review(request, item_id):
     error_message = ''
     item = Rental_Item.objects.get(id=item_id)
     profile = Profile.objects.get(user_id=request.user.id)
+    form = ReviewForm()
     if request.method == 'POST':
         form = ReviewForm(request.POST)
-        if form.is_valid:
+        if form.is_valid():
             new_rev = form.save(commit=False)
             new_rev.author = profile
             new_rev.item = item
             new_rev.save()
             return redirect('item_detail', item_id)
-        else:
+        else: 
             error_message = 'Form Invalid'
-    form = ReviewForm()
     context = {
         'form':form,
         'item':item,
