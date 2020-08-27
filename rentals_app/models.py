@@ -9,6 +9,9 @@ from datetime import date
 
 from django.core.exceptions import ValidationError
 
+# https://stackoverflow.com/questions/30849862/django-max-length-for-integerfield
+from django.core.validators import MaxValueValidator
+
 
 # -------------------------------------------------------------------  Django User Model
 from django.contrib.auth.models import User
@@ -57,6 +60,7 @@ class Rental_Item(models.Model):
     available = models.BooleanField()
     price = models.DecimalField('Price Per Day', max_digits=10, decimal_places=2)
     replacement_value = models.DecimalField('Replacement Value', max_digits=10, decimal_places=2)
+    min_rental = models.IntegerField('Minimum Rental Period in Days', default=1)
 
     def __str__(self):
         return self.title
@@ -71,9 +75,10 @@ class Reservation(models.Model):
     end_date = models.DateField()
     pick_up = models.DateTimeField('Choose a pick up day and time', blank=True, null=True)
     drop_off = models.DateTimeField('Choose a drop off day and time', blank=True, null=True)
-    picked_up = models.BooleanField(blank=True, null=True)
+    picked_up = models.BooleanField(default=False)
     returned_date = models.DateTimeField(blank=True, null=True)
-    approved = models.BooleanField(blank=True, null=True)
+    approved = models.BooleanField(default=False)
+    ready_for_pickup = models.BooleanField(default=False)
 
     def __str__(self):
         return f"""
@@ -100,18 +105,18 @@ class Reservation(models.Model):
 
 
 
-# -------------------------------------------------------------------  Item_Reviews Model
-
-# -------------------------------------------------------------------  User_Reviews Model
+# -------------------------------------------------------------------  Reviews Model
 
 
-# def validate_date_range(item_id, start_date, end_date):
-#     rez_list = Reservation.objects.filter(item_id=item_id)
-#     for booking in rez_list:
-#         if end_date >= booking.start_date:
-#             if start_date <= booking.end_date:
-#                 return False
-#             else:
-#                 return True
-#         else:
-#             return True
+class Review(models.Model):
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    item = models.ForeignKey(Rental_Item, on_delete=models.CASCADE,blank=True,null=True)
+    title = models.CharField(max_length=100)
+    body = models.CharField(max_length=1000)
+    stars = models.IntegerField(validators=[MaxValueValidator(5)])
+
+    def __str__(self):
+        return self.title
+
+
+

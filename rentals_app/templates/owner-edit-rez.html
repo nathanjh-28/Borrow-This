@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="box mt-6">
+    <h1 class="title is-1">Revise Reservation for {{item.title}}</h1>
+    <form class="add-item-form" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if error_message %}<p class=" my-3 subtitle is-3 has-text-danger">{{ error_message }} </p>
+        {% endif %}
+        <input type="submit" class="button is-success" value="Update Reservation">
+    </form>
+    <a href="{% url 'rez_detail' rez.id %}"><button class="button is-info">Cancel</button></a>
+</div>
+{% endblock%}

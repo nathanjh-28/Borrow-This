@@ -33,3 +33,11 @@ def validate_date_range_update(rez_id, item_id, start_date, end_date):
             if start_date <= booking.end_date:
                 return False
     return True
+
+def validate_min_rental(length, start, end):
+    rental_period = end-start
+    rental_period = rental_period.days
+    if rental_period >= length:
+        return True
+    else:
+        return False

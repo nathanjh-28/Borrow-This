@@ -6,10 +6,116 @@
 
 <div class="browse-page">
 <section class="browse-header my-6">
-    <h3 class="subtitle is-3 mx-3 browse-header-child">
-        You are currently looking at <span class="has-text-weight-bold">ALL ITEMS</span>  in  <span class="has-text-weight-bold"> Bozeman Montana </span>
+    <h3 class="subtitle is-4 mx-3 browse-header-child">
+        You are currently looking at 
+        
+        
+        <div class="dropdown" id="cat-dropdown">
+            <div class="dropdown-trigger">
+                <div onclick="catDrop()" class="" aria-haspopup="true" aria-controls="dropdown-menu">
+                    {% if this_cat %}
+                    <span class="has-text-weight-bold">{{this_cat.name}}</span>
+                    {% else %}
+                    <span class="has-text-weight-bold">All Categories</span>
+                    {% endif %}
+                    <span class="icon is-small">
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                <div class="dropdown-content">
+                    {% if this_cat and this_loc %}
+                    <a href="{% url 'browse_loc' this_loc.id %}"
+                    class="dropdown-item">
+                        All Categories
+                    </a>
+                    {% elif this_cat %}
+                    <a href="{% url 'browse' %}"
+                    class="dropdown-item">
+                        All Categories
+                    </a>
+                    {% endif %}
+                    {% for cat in cats %}
+                    {% if this_loc %}
+                    <a href="{% url 'browse_loc_cat' loc_id=this_loc.id cat_id=cat.id %}"
+                    class="dropdown-item">
+                        {{cat.name}}
+                    </a>
+                    {% else %}
+                    <a href="{% url 'browse_cat' cat.id %}" class="dropdown-item">
+                        {{cat.name}}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+        </div>
+        
+        in 
+        
+        <div class="dropdown" id="loc-dropdown">
+            <div class="dropdown-trigger">
+                <div onclick="locDrop()" class="" aria-haspopup="true" aria-controls="dropdown-menu">
+                    {% if this_loc %}
+                    <span class="has-text-weight-bold">{{this_loc.name}}</span>
+                    {% else %}
+                    <span class="has-text-weight-bold">All Locations</span>
+                    {% endif %}
+                    <span class="icon is-small">
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                <div class="dropdown-content">
+                {% if this_loc and this_cat %}
+                <a href="{% url 'browse_cat' this_cat.id %}"
+                class="dropdown-item">
+                    All Locations
+                </a>
+                {% elif this_loc %}
+                <a href="{% url 'browse' %}"
+                class="dropdown-item">
+                All Locations
+            </a>
+                {% endif %}
+                {% for loc in locs %}
+                {% if this_cat %}
+                <a href="{% url 'browse_loc_cat' loc.id this_cat.id %}" class="dropdown-item">
+                    {{loc.name}}
+                </a>
+                {% else %}
+                <a href="{% url 'browse_loc' loc.id %}" class="dropdown-item">
+                    {{loc.name}}
+                </a>
+                {% endif %}
+                {% endfor %}
+        
+            </div>
+        </div>
+        </div>
+
+
     </h3>
 </section>
+
+
+    
+
+<script>
+    function catDrop() {
+        const catDropDown = document.getElementById('cat-dropdown')
+        catDropDown.classList.toggle("is-active");
+    }
+    function locDrop() {
+        const locDropDown = document.getElementById('loc-dropdown')
+        locDropDown.classList.toggle("is-active");
+    }
+
+</script>
+
+
     <section class="br-rental-items">
         <!-- https://stackoverflow.com/questions/1107737/numeric-for-loop-in-django-templates -->
         {#}{% for i in '0123456789'|make_list %}{#}

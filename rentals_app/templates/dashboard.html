@@ -4,19 +4,16 @@
 {% block content %}
 
 <div class="dashboard-page">
+    <div class="mt-6">
+    </div>
+        {% if needs_approval|length > 0 %}
+        <a href="#my-items-rez" class="button is-success">Reservations Need Approval!</a>
+        {% endif %}
 
     <!-- Profile Info -->
-    <div class="profile-header mt-6">
+    <div class="profile-header">
         <h3 class="subtitle is-3 profile-header-text">About Me</h3>
     </div>
-            <div class="edit-delete-account">
-                <a href="{% url 'edit_profile' me.id %}">
-                    <button class="button is-info is-outlined">Edit Profile</button>
-                </a>
-                <a href="{% url 'delete_profile' %}">
-                    <button class="button is-danger is-outlined">Delete Account</button>
-                </a>
-            </div>
     <section class="profile-section">
         <div class="box profile dashboard-boxes mb-3">
             <article class="media">
@@ -28,7 +25,7 @@
                 <div class="media-content">
                     <div class="content">
                         <p>
-                            <span class="title is-3">{{me.display_name}}</span> 
+                            <span class="title is-3">{{me.display_name}}</span>
                             
                             <br>
                             <span>{{me.location}}</span>
@@ -38,16 +35,24 @@
                     </div>
                 </div>
             </article>
+            <div class="edit-delete-account">
+                <a href="{% url 'edit_profile' me.id %}">
+                    <button class="button is-small is-info is-outlined">Edit Profile</button>
+                </a>
+                <a href="{% url 'delete_profile' %}">
+                    <button class="button is-small is-danger is-outlined">Delete Account</button>
+                </a>
+            </div>
         </div>
     </section>
 
-    
+
     <!-- My Items Section -->
     <div class="profile-header">
         <h3 class="subtitle is-3 profile-header-text">My Items</h3>
         <a href="{% url 'add_item' %}"><button class="button is-success mx-3">Add Item</button>
     </div></a>
-    
+
     <section class="my-things">
         <div class="box dashboard-boxes my-rental-items">
             {#}{% for i in '012'|make_list %}{#}
@@ -60,24 +65,31 @@
                         </figure>
                     </div>
                 </a>
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-content">
-                                <p class="title is-4">{{item.title}}</p>
-                                <p class="subtitle is-6">{{item.available}}</p>
-                            </div>
-                        </div>
-                        <div class="content">
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="title is-4">{{item.title}}</p>
+                            <p class="subtitle is-6">
+                                {% if item.available %}
+                                Available For Rent
+                                {% else %}
+                                Not Available
+                                {% endif %}
+                            </p>
                         </div>
                     </div>
+                    <div class="content">
+                    </div>
                 </div>
+            </div>
             {% endfor %}
             {% if items|length == 0 %}
             <a href="{% url 'add_item' %}">
                 <div class="card my-rental-item mx-2 my-2">
                     <div class="card-image">
                         <figure class="image ">
-                            <img src='https://images.unsplash.com/photo-1557318041-1ce374d55ebf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80' alt="Placeholder image">
+                            <img src='https://images.unsplash.com/photo-1557318041-1ce374d55ebf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80'
+                                alt="Placeholder image">
                         </figure>
                     </div>
                     <div class="card-content">
@@ -95,39 +107,90 @@
             {% endif %}
         </div>
     </section>
-    
+
     <!-- My Reservations Section -->
     <div class="profile-header">
         <h3 class="subtitle is-3 profile-header-text">My Reservations</h3>
     </div>
-    
+
     <section class="my-things">
-        <div class="box dashboard-boxes my-rental-items">
+        <div class="box dashboard-boxes my-rental-items ">
             {#}{% for i in '012'|make_list %}{#}
             {% for rez in reservations %}
             <a href="{% url 'rez_detail' rez.id %}">
-            <div class="card my-rental-item mx-2 mb-2">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img src={{rez.item.picture}} alt="Placeholder image">
-                    </figure>
-                </div>
+                <div class="card my-rental-item mx-2 mb-2 
+                {% if rez.ready_for_pickup %}
+                is-ready
+                {% endif %}
+                ">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img src={{rez.item.picture}} alt="Placeholder image">
+                        </figure>
+                    </div>
             </a>
-                <div class="card-content">
-                    <div class="media">
-                        <div class="media-content">
-                            <p class="title is-4">{{rez.occasion}}</p>
-                            <p class="subtitle is-6">{{rez.start_date}} - {{rez.end_date}}</p>
-                        </div>
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-content">
+                        <p class="title is-4">{{rez.occasion}}</p>
+                        <p class="subtitle is-6">{{rez.start_date}} - {{rez.end_date}}</p>
+                        {% if rez.ready_for_pickup %}
+                        <p class="is-ready-text">Ready for Pick Up!</p>
+                        {% endif %}
                     </div>
-                    <div class="content">
-                    </div>
+                </div>
+                <div class="content">
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
+    </section>
+
+
+
+
+    <!-- My Item's Reservations Section -->
+    <div class="profile-header">
+        <h3 class="subtitle is-3 profile-header-text">My Items' Reservations</h3>
+    </div>
+    <section class="my-things">
+        <div class="box dashboard-boxes my-rental-items" id="my-items-rez">
+            {#}{% for i in '012'|make_list %}{#}
+            {% for rez in myreservations %}
+            <a href="{% url 'rez_detail' rez.id %}">
+                <div class="card my-rental-item mx-2 mb-2
+                {% if rez.ready_for_pickup %}
+                is-ready
+                {% endif %}
+                ">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img src={{rez.item.picture}} alt="Placeholder image">
+                        </figure>
+                    </div>
+            </a>
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-content">
+                        <p class="title is-4">{{rez.occasion}}</p>
+                        <p class="subtitle is-6">{{rez.start_date}} - {{rez.end_date}}</p>
+
+                        {% if not rez.approved %}
+                        <a href="{% url 'rez_edit_owner' rez.id %}"class="is-danger button subtitle is-6">Needs Approval</a>
+                        {% else %}
+                        <a href="{% url 'rez_detail' rez.id %}" class="button subtitle is-6 is-success">Approved!</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="content">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
     </section>
 </div>
+
 
 
 
