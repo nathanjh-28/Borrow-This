@@ -6,11 +6,11 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 # ------------------------------------------------------------------- Models, Forms
-from .models import Profile, Rental_Item, Reservation
-from .forms import ProfileForm, RentalItemForm, ReservationForm
+from .models import Profile, Rental_Item, Reservation, Location, Category, Review
+from .forms import ProfileForm, RentalItemForm, ReservationForm,OwnerReservationForm, ReviewForm
 
 
-from .validators import get_reservations, validate_date_range, validate_dates, validate_date_range_update
+from .validators import get_reservations, validate_date_range, validate_dates, validate_date_range_update, validate_min_rental
 
 
 
@@ -52,10 +52,17 @@ def dashboard(request):
     current_profile = Profile.objects.get(user_id=request.user.id)
     items = Rental_Item.objects.filter(owner_id=current_profile.id)
     reservations = Reservation.objects.filter(renter_id=current_profile.id)
+    item_ids = []
+    for item in items:
+        item_ids.append(item.id)
+    myreservations = Reservation.objects.filter(item_id__in=item_ids)
+    needs_approval = myreservations.filter(approved=False)
     context = {
         'me':current_profile,
         'items': items,
         'reservations':reservations,
+        'myreservations':myreservations,
+        'needs_approval':needs_approval,
     }
     return render(request, 'dashboard.html', context)
 
@@ -104,11 +111,64 @@ def delete_profile(request):
 # ------------------------------------------------------------------- Browse
 
 def browse(request):
+    locations = Location.objects.all()
+    categories = Category.objects.all()
     items = Rental_Item.objects.all()
     context = {
         'items':items,
+        'cats': categories,
+        'locs':locations,
     }
     return render(request, 'browse.html', context)
+
+# ------------------------------------------------------------------- Browse By Category
+
+def browse_cat(request, cat_id):
+    this_cat = Category.objects.get(id=cat_id)
+    items = Rental_Item.objects.filter(category_id=cat_id)
+    locations = Location.objects.all()
+    categories = Category.objects.all()
+    context = {
+        'this_cat':this_cat,
+        'items':items,
+        'cats': categories,
+        'locs':locations,
+    }
+    return render(request, 'browse.html', context)
+
+# ------------------------------------------------------------------- Browse By Location
+
+
+def browse_loc(request, loc_id):
+    this_loc = Location.objects.get(id=loc_id)
+    items = Rental_Item.objects.filter(location_id=loc_id)
+    locations = Location.objects.all()
+    categories = Category.objects.all()
+    context = {
+        'items':items,
+        'this_loc':this_loc,
+        'cats': categories,
+        'locs':locations,
+    }
+    return render(request,'browse.html', context)
+
+# ------------------------------------------------------------------- Browse By Cat and Loc
+
+
+def browse_loc_cat(request, loc_id, cat_id):
+    this_loc = Location.objects.get(id=loc_id)
+    this_cat = Category.objects.get(id=cat_id)
+    items = Rental_Item.objects.filter(location_id=loc_id, category_id=cat_id)
+    locations = Location.objects.all()
+    categories = Category.objects.all()
+    context = {
+        'items':items,
+        'this_loc':this_loc,
+        'this_cat':this_cat,
+        'cats': categories,
+        'locs':locations,
+    }
+    return render(request,'browse.html', context)
 
 # ------------------------------------------------------------------- User Public
 
@@ -127,9 +187,13 @@ def item_detail(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
+    reservations = Reservation.objects.filter(item_id=item.id)
+    reviews = Review.objects.filter(item_id=item_id)
     context = {
         'item':item,
         'current_profile':current_profile,
+        'reservations':reservations,
+        'reviews':reviews,
     }
 
     return render(request, 'item-details.html', context)
@@ -203,6 +267,7 @@ def add_rez(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
+    reservations = Reservation.objects.filter(item_id=item_id)
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
@@ -211,8 +276,19 @@ def add_rez(request, item_id):
             new_rez.item_id = item.id
             if validate_date_range(item_id,new_rez.start_date,new_rez.end_date):
                 if validate_dates(new_rez.start_date,new_rez.end_date):
-                    new_rez.save()
-                    return redirect ('home')
+                    if validate_min_rental(item.min_rental,new_rez.start_date,new_rez.end_date):
+                        new_rez.save()
+                        return redirect ('home')
+                    else:
+                        error_message = f"You must rent this item for at least {item.min_rental} days"
+                        new_rez.save()
+                        new_rez.delete()
+                        context_err = {
+                        'form': form,
+                        'item': item,
+                        'error_message':error_message,
+                        }
+                        return render(request, 'add-reservation.html', context_err)
                 else:
                     error_message = 'Your start date must be before your end date'
                     new_rez.save()
@@ -238,6 +314,7 @@ def add_rez(request, item_id):
         'form': form,
         'item': item,
         'error_message':error_message,
+        'reservations':reservations,
     }
     return render(request, 'add-reservation.html', context)
 
@@ -248,9 +325,14 @@ def rez_detail(request, rez_id):
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
     reservation = Reservation.objects.get(id=rez_id)
+    item = Rental_Item.objects.get(id=reservation.item_id)
+    rez_total = reservation.end_date - reservation.start_date
+    rez_total = rez_total.days*item.price
+    print(type(rez_total))
     context = {
         'rez':reservation,
         'current_profile':current_profile,
+        "rez_total":rez_total,
     }
     return render(request, 'reservation-detail.html', context)
 
@@ -263,6 +345,8 @@ def rez_edit(request, rez_id):
     item = Rental_Item.objects.get(id=reservation.item_id)
     current_profile = Profile.objects.get(user_id=request.user.id)
     if current_profile.id is not reservation.renter_id:
+        return redirect ('home')
+    if reservation.approved:
         return redirect ('home')
     if request.method == 'POST':
         form = ReservationForm(request.POST, instance=reservation)
@@ -290,6 +374,34 @@ def rez_edit(request, rez_id):
     }
     return render(request, 'edit-reservation.html', context)
 
+# ------------------------------------------------------------------- Reservation Revise by Owner
+
+
+def rez_edit_owner(request, rez_id):
+    error_message = ''
+    rez = Reservation.objects.get(id=rez_id)
+    item = Rental_Item.objects.get(id=rez.item_id)
+    current_profile = Profile.objects.get(user_id=request.user.id)
+    if current_profile.id is not item.owner_id:
+        return redirect ('home')
+    if request.method == 'POST':
+        form = OwnerReservationForm(request.POST, instance=rez)
+        if form.is_valid():
+            updated_rez = form.save()
+            return redirect('rez_detail', rez_id)
+        else:
+            error_message = 'Invalid Form'
+    form = OwnerReservationForm(instance=rez)
+    context = {
+        'form':form,
+        'item':item,
+        'rez':rez,
+        'error_message':error_message,
+    }
+    return render(request, 'owner-edit-rez.html', context)
+
+
+
 # ------------------------------------------------------------------- Reservation Delete
 
 @login_required
@@ -300,6 +412,34 @@ def rez_delete(request, rez_id):
         return redirect ('home')
     reservation.delete()
     return redirect('browse')
+
+
+# ------------------------------------------------------------------- Add Review
+def add_review(request, item_id):
+    error_message = ''
+    item = Rental_Item.objects.get(id=item_id)
+    profile = Profile.objects.get(user_id=request.user.id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid:
+            new_rev = form.save(commit=False)
+            new_rev.author = profile
+            new_rev.item = item
+            new_rev.save()
+            return redirect('item_detail', item_id)
+        else:
+            error_message = 'Form Invalid'
+    form = ReviewForm()
+    context = {
+        'form':form,
+        'item':item,
+        'error_message':error_message,
+    }
+    return render(request, 'add-review.html', context)
+
+
+
+
 
 # ------------------------------------------------------------------- Test
 

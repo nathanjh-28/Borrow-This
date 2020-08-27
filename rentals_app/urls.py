@@ -43,6 +43,12 @@ urlpatterns = [
     
     path('browse/', views.browse, name='browse'),
 
+    path('browse/<int:cat_id>', views.browse_cat, name='browse_cat'),
+
+    path('browse/loc/<int:loc_id>', views.browse_loc, name='browse_loc'),
+
+    path('browse/loc/<int:loc_id>/cat/<int:cat_id>', views.browse_loc_cat, name='browse_loc_cat'),
+
 # -------------------------------------------------------------------   Add Item Form
 
     path('items/new', views.add_item, name='add_item'),
@@ -78,10 +84,19 @@ urlpatterns = [
 
     path('rez/<int:rez_id>/edit', views.rez_edit, name='rez_edit'),
 
+
+
+    path('myrez/<int:rez_id>/edit', views.rez_edit_owner, name='rez_edit_owner'),
+
 # -------------------------------------------------------------------   Reservation Delete
 
     path('rez/<int:rez_id>/delete', views.rez_delete, name='rez_delete'),
 
+
+
+# -------------------------------------------------------------------   Reviews
+
+    path('items/<int:item_id>/review/new', views.add_review, name='add_review'),
 
 
 
