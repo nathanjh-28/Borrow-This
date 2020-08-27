@@ -57,6 +57,7 @@ class Rental_Item(models.Model):
     available = models.BooleanField()
     price = models.DecimalField('Price Per Day', max_digits=10, decimal_places=2)
     replacement_value = models.DecimalField('Replacement Value', max_digits=10, decimal_places=2)
+    min_rental = models.IntegerField('Minimum Rental Period in Days', default=1)
 
     def __str__(self):
         return self.title

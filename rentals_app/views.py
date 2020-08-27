@@ -10,7 +10,7 @@ from .models import Profile, Rental_Item, Reservation, Location, Category
 from .forms import ProfileForm, RentalItemForm, ReservationForm,OwnerReservationForm
 
 
-from .validators import get_reservations, validate_date_range, validate_dates, validate_date_range_update
+from .validators import get_reservations, validate_date_range, validate_dates, validate_date_range_update, validate_min_rental
 
 
 
@@ -274,8 +274,19 @@ def add_rez(request, item_id):
             new_rez.item_id = item.id
             if validate_date_range(item_id,new_rez.start_date,new_rez.end_date):
                 if validate_dates(new_rez.start_date,new_rez.end_date):
-                    new_rez.save()
-                    return redirect ('home')
+                    if validate_min_rental(item.min_rental,new_rez.start_date,new_rez.end_date):
+                        new_rez.save()
+                        return redirect ('home')
+                    else:
+                        error_message = f"You must rent this item for at least {item.min_rental} days"
+                        new_rez.save()
+                        new_rez.delete()
+                        context_err = {
+                        'form': form,
+                        'item': item,
+                        'error_message':error_message,
+                        }
+                        return render(request, 'add-reservation.html', context_err)
                 else:
                     error_message = 'Your start date must be before your end date'
                     new_rez.save()

@@ -28,7 +28,15 @@
 
                 <div class="content">
                     {{item.description}}
-
+                    <p>
+                        Minimum Rental Period: 
+                        {{item.min_rental}}
+                        {% if item.min_rental|length > 1 %}
+                        days
+                        {% else %}
+                        day
+                        {% endif %}
+                    </p>
                 </div>
                 <p>
                     {% if item.available %}

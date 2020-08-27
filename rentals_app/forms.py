@@ -24,7 +24,7 @@ class RentalItemForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea)
     class Meta:
         model = Rental_Item
-        fields = ['category', 'location','title','description','picture','link','available','price','replacement_value']
+        fields = ['category', 'location','title','description','picture','link','available','price','replacement_value', 'min_rental']
 
 # ---------------------------------------------------------  Reservation Form for Renter
 
