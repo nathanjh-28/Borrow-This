@@ -6,6 +6,13 @@
 
     <div class="box mt-6">
         <h1 class="title is-1">Make a Reservation for {{item.title}}</h1>
+        <h3 class="subtitle">Minimum Rental Period: {{item.min_rental}}
+            {% if item.min_rental == 1 %}
+            day
+            {% else %}
+            days
+            {% endif %}
+        </h3>
         <form class="add-item-form" method="POST">
             {% csrf_token %}
             {{ form.as_p }}

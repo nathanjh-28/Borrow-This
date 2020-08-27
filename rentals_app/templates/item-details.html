@@ -31,10 +31,10 @@
                     <p>
                         Minimum Rental Period: 
                         {{item.min_rental}}
-                        {% if item.min_rental|length > 1 %}
-                        days
-                        {% else %}
+                        {% if item.min_rental == 1 %}
                         day
+                        {% else %}
+                        days
                         {% endif %}
                     </p>
                 </div>
