@@ -32,12 +32,20 @@
         {{rez.returned_date}}
     </p>
     <a href="{% url 'item_detail' rez.item.id %}">
+        <!-- If User is renting item -->
         <button class="button is-success is-outlined">Item</button></a>
         {% if current_profile.id == rez.renter.id %}
     <a href="{% url 'rez_edit' rez.id %}">
         <button class="button is-info">Edit</button></a>
     <a href="{% url 'rez_delete' rez.id %}">
         <button class="button is-danger">Delete</button></a>
+        {% endif %}
+        <!-- if User owns the item -->
+        {% if current_profile.id == rez.item.owner.id %}
+        <!-- <a href="#"><button class="button is-success">Approve!</button></a> -->
+        <a href="{% url 'rez_edit_owner' rez.id %}"><button class="button is-success"> Revise</button></a>
+        <a href="{% url 'rez_delete' rez.id %}">
+        <button class="button is-danger">Cancel</button></a>
         {% endif %}
 
 </div>

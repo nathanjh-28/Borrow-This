@@ -84,6 +84,10 @@ urlpatterns = [
 
     path('rez/<int:rez_id>/edit', views.rez_edit, name='rez_edit'),
 
+
+
+    path('myrez/<int:rez_id>/edit', views.rez_edit_owner, name='rez_edit_owner'),
+
 # -------------------------------------------------------------------   Reservation Delete
 
     path('rez/<int:rez_id>/delete', views.rez_delete, name='rez_delete'),

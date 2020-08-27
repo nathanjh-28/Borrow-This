@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 # ------------------------------------------------------------------- Models, Forms
 from .models import Profile, Rental_Item, Reservation, Location, Category
-from .forms import ProfileForm, RentalItemForm, ReservationForm
+from .forms import ProfileForm, RentalItemForm, ReservationForm,OwnerReservationForm
 
 
 from .validators import get_reservations, validate_date_range, validate_dates, validate_date_range_update
@@ -55,7 +55,7 @@ def dashboard(request):
     item_ids = []
     for item in items:
         item_ids.append(item.id)
-    myreservations = Reservation.objects.filter(renter_id=current_profile.id).filter(item_id__in=item_ids)
+    myreservations = Reservation.objects.filter(item_id__in=item_ids)
     context = {
         'me':current_profile,
         'items': items,
@@ -347,6 +347,34 @@ def rez_edit(request, rez_id):
         'error_message':error_message,
     }
     return render(request, 'edit-reservation.html', context)
+
+# ------------------------------------------------------------------- Reservation Revise by Owner
+
+
+def rez_edit_owner(request, rez_id):
+    error_message = ''
+    rez = Reservation.objects.get(id=rez_id)
+    item = Rental_Item.objects.get(id=rez.item_id)
+    current_profile = Profile.objects.get(user_id=request.user.id)
+    if current_profile.id is not item.owner_id:
+        return redirect ('home')
+    if request.method == 'POST':
+        form = OwnerReservationForm(request.POST, instance=rez)
+        if form.is_valid():
+            updated_rez = form.save()
+            return redirect('rez_detail', rez_id)
+        else:
+            error_message = 'Invalid Form'
+    form = OwnerReservationForm(instance=rez)
+    context = {
+        'form':form,
+        'item':item,
+        'rez':rez,
+        'error_message':error_message,
+    }
+    return render(request, 'owner-edit-rez.html', context)
+
+
 
 # ------------------------------------------------------------------- Reservation Delete
 

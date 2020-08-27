@@ -71,9 +71,9 @@ class Reservation(models.Model):
     end_date = models.DateField()
     pick_up = models.DateTimeField('Choose a pick up day and time', blank=True, null=True)
     drop_off = models.DateTimeField('Choose a drop off day and time', blank=True, null=True)
-    picked_up = models.BooleanField(blank=True, null=True)
+    picked_up = models.BooleanField(default=False)
     returned_date = models.DateTimeField(blank=True, null=True)
-    approved = models.BooleanField(blank=True, null=True)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return f"""

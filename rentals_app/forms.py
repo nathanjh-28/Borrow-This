@@ -26,7 +26,7 @@ class RentalItemForm(forms.ModelForm):
         model = Rental_Item
         fields = ['category', 'location','title','description','picture','link','available','price','replacement_value']
 
-# ---------------------------------------------------------  Reservation Form
+# ---------------------------------------------------------  Reservation Form for Renter
 
 class ReservationForm(forms.ModelForm):
     # occasion = forms.CharField(widget=forms.TextInput(attrs={'class': 'special'}))
@@ -41,6 +41,16 @@ class ReservationForm(forms.ModelForm):
             'end_date': DateInput(),
             'pick_up': DateTimeInput(),
             'drop_off': DateTimeInput(),
+        }
+
+# ---------------------------------------------------------  Reservation Form for Owner
+
+class OwnerReservationForm(forms.ModelForm):
+    class Meta:
+        model = Reservation
+        fields = ['approved', 'picked_up','returned_date']
+        widgets = {
+            'returned_date':DateTimeInput(),
         }
 
 
