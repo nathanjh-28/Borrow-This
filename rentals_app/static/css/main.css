@@ -1,10 +1,19 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Playfair+Display:ital,wght@0,400;0,700;1,800&display=swap');
 
 body {
     background-color: whitesmoke;
     display:flex;
     min-height: 100vh;
     flex-direction: column;
+}
+
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.title{
+    font-family: 'Playfair Display', serif;
 }
 
 main {
@@ -23,6 +32,7 @@ footer {
 
 .blue-logo{
     color: #0794D2;
+    font-size: 1.25em;
 }
 
 .navbar {
@@ -35,7 +45,16 @@ footer {
     background-color: whitesmoke;
 }
 
+input, textarea {
+    display: block;
+    width: 100%;
+    font-size: large;
+    margin-bottom: 1em;
+}
 
+.width-80 {
+    width: 80%;
+}
 
 
 /* home page layout

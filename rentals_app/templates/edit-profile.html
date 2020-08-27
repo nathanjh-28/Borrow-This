@@ -2,7 +2,7 @@
 {% block content %}
 
 
-<div>
+<div class="width-80">
     <h1 class="title is-1 mx-6 mt-6">Edit Account</h1>
     <div class="box card">
         <form class="mx-6 mt-6 signup-form" method="post" action="">
@@ -10,7 +10,7 @@
           {{ form.as_p }}
           {{ pform.as_p }}
           {% if error_message %}<p class=" my-3 subtitle is-3 has-text-danger">{{ error_message }}</p>{% endif %}
-          <input type="submit" class="button is-success" value="Update Account">
+          <input type="submit" class="button is-success my-3" value="Update Account">
         </form>
         <a href="{% url 'dashboard' %}"><button class="button is-info">Cancel</button></a>
     

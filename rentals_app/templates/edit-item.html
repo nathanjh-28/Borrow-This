@@ -2,14 +2,14 @@
 
 {% block content %}
 
-<div class="box mt-6">
+<div class="box mt-6 width-80">
     <h1 class="title is-1">Edit Item For Rent</h1>
     <form class="add-item-form" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         {% if error_message %}<p class=" my-3 subtitle is-3 has-text-danger">{{ error_message }} </p>
         {% endif %}
-        <input type="submit" class="button is-success" value="Update Item">
+        <input type="submit" class="button is-success my-3" value="Update Item">
         <a href="{% url 'item_detail' item.id %}"><button class="button is-info">Cancel</button></a>
     </form>
 </div>

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="add-rez-page">
+<div class="add-rez-page width-80">
 
     <div class="box mt-6">
         <h1 class="title is-1">Make a Reservation for {{item.title}}</h1>
@@ -18,7 +18,7 @@
             {{ form.as_p }}
             {% if error_message %}<p class=" my-3 subtitle is-3 has-text-danger">{{ error_message }} </p>
             {% endif %}
-            <input type="submit" class="button is-success" value="Create Reservation">
+            <input type="submit" class="button is-success my-3" value="Create Reservation">
         </form>
     </div>
     <div class="box card">
