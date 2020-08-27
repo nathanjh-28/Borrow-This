@@ -9,8 +9,15 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile, Rental_Item, Reservation, Location, Category, Review
 from .forms import ProfileForm, RentalItemForm, ReservationForm,OwnerReservationForm, ReviewForm
 
+# ------------------------------------------------------------------- Rez Validators
+from .validators import validate_rez, validate_rez_update
 
-from .validators import get_reservations, validate_date_range, validate_dates, validate_date_range_update, validate_min_rental
+# ------------------------------------------------------------------- For Today's Date
+from datetime import date
+
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
 
 
 
@@ -276,41 +283,72 @@ def add_rez(request, item_id):
             new_rez = form.save(commit=False)
             new_rez.renter_id = current_profile.id
             new_rez.item_id = item.id
-            if validate_date_range(item_id,new_rez.start_date,new_rez.end_date):
-                if validate_dates(new_rez.start_date,new_rez.end_date):
-                    if validate_min_rental(item.min_rental,new_rez.start_date,new_rez.end_date):
-                        new_rez.save()
-                        return redirect ('home')
-                    else:
-                        error_message = f"You must rent this item for at least {item.min_rental} days"
-                        new_rez.save()
-                        new_rez.delete()
-                        context_err = {
-                        'form': form,
-                        'item': item,
-                        'error_message':error_message,
-                        }
-                        return render(request, 'add-reservation.html', context_err)
-                else:
-                    error_message = 'Your start date must be before your end date'
-                    new_rez.save()
-                    new_rez.delete()
-                    context_err = {
-                    'form': form,
-                    'item': item,
-                    'error_message':error_message,
-                    }
-                    return render(request, 'add-reservation.html', context_err)
+            a = date.today()
+            b = item.id
+            c = item.min_rental
+            d = new_rez.start_date
+            e = new_rez.end_date
+            msg = validate_rez(a,b,c,d,e)
+            if not msg:
+                new_rez.save()
+                return redirect('home')
             else:
-                error_message = 'Sorry!  Those dates overlap with a current reservation!'
+                error_message = msg
                 new_rez.save()
                 new_rez.delete()
-                context_err = {
-                    'form': form,
-                    'item': item,
-                    'error_message':error_message,
-                    }
-                return render(request, 'add-reservation.html', context_err)
+            # date_range_msg = validate_date_range_msg(item_id,new_rez.start_date,new_rez.end_date)
+            # dates_valid_msg = validate_dates_msg(new_rez.start_date,new_rez.end_date)
+            # dates_min_valid = validate_min_rental_msg(item.min_rental,new_rez.start_date,new_rez.end_date)
+            # past_dates = validate_no_past_rentals_msg((date.today()),new_rez.start_date)
+            # print('look here nathan')
+            # print(date.today())
+            # if not date_range_msg:
+            #     if not dates_valid_msg:
+            #         if not dates_min_valid:
+            #             if not past_dates:
+            #                 new_rez.save()
+            #                 return redirect ('home')
+            #             else:
+            #                 error_message = past_dates
+            #                 new_rez.save()
+            #                 new_rez.delete()
+            #                 context_err = {
+            #                 'form': form,
+            #                 'item': item,
+            #                 'error_message':error_message,
+            #                 }
+            #                 return render(request, 'add-reservation.html', context_err)
+
+            #         else:
+            #             error_message = dates_min_valid
+            #             new_rez.save()
+            #             new_rez.delete()
+            #             context_err = {
+            #             'form': form,
+            #             'item': item,
+            #             'error_message':error_message,
+            #             }
+            #             return render(request, 'add-reservation.html', context_err)
+            #     else:
+            #         error_message = dates_valid_msg
+            #         new_rez.save()
+            #         new_rez.delete()
+            #         context_err = {
+            #         'form': form,
+            #         'item': item,
+            #         'error_message':error_message,
+            #         }
+            #         return render(request, 'add-reservation.html', context_err)
+            # else:
+            #     error_message = date_range_msg
+            #     new_rez.save()
+            #     new_rez.delete()
+            #     context_err = {
+            #         'form': form,
+            #         'item': item,
+            #         'error_message':error_message,
+            #         }
+            #     return render(request, 'add-reservation.html', context_err)
         else: error_message = 'invalid submission'
     context = {
         'form': form,
@@ -354,17 +392,26 @@ def rez_edit(request, rez_id):
         form = ReservationForm(request.POST, instance=reservation)
         if form.is_valid():
             updated_rez = form.save(commit=False)
-            a = updated_rez.item_id
-            b = updated_rez.start_date
-            c = updated_rez.end_date
-            if validate_date_range_update(rez_id,a,b,c):
-                if validate_dates (b,c):
-                    updated_rez.save()
-                    return redirect('rez_detail', rez_id)
-                else:
-                    error_message = 'Start Date must occur before End Date'
+            a = rez_id
+            b = date.today()
+            c = updated_rez.item_id
+            d = item.min_rental
+            e = updated_rez.start_date
+            f = updated_rez.end_date
+            msg = validate_rez_update(a,b,c,d,e,f)
+            if not msg:
+                updated_rez.save()
+                return redirect('rez_detail', rez_id)
             else:
-                error_message = 'Conflicting Dates'
+                error_message = msg
+            # if validate_date_range_update(rez_id,a,b,c):
+            #     if validate_dates (b,c):
+            #         updated_rez.save()
+            #         return redirect('rez_detail', rez_id)
+            #     else:
+            #         error_message = 'Start Date must occur before End Date'
+            # else:
+            #     error_message = 'Conflicting Dates'
         else:
             error_message = 'Invalid'
     form = ReservationForm(instance=reservation)
