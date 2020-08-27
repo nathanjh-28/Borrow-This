@@ -438,6 +438,25 @@ def add_review(request, item_id):
     }
     return render(request, 'add-review.html', context)
 
+# ------------------------------------------------------------------- Edit Review
+
+def edit_review(request, rev_id):
+    error_message = ''
+    review = Review.objects.get(id=rev_id)
+    item = Rental_Item.objects.get(id=review.item_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            return redirect('item_detail', item.id)
+        error_message = 'Invalid Form'
+    form = ReviewForm(instance=review)
+    context = {
+        'form':form,
+        'item':item,
+    }
+    return render(request, 'edit-review.html', context)
+
 # ------------------------------------------------------------------- Delete Review
 @login_required
 def delete_review(request, rev_id):
@@ -451,10 +470,3 @@ def delete_review(request, rev_id):
         review.delete()
         return redirect('item_detail', item.id)
 
-
-# ------------------------------------------------------------------- Test
-
-def test(request, item_id):
-    # msg = 'hello world'
-    # return HttpResponse(msg)
-    return HttpResponse(get_reservations(item_id))
