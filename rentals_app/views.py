@@ -57,12 +57,14 @@ def dashboard(request):
         item_ids.append(item.id)
     myreservations = Reservation.objects.filter(item_id__in=item_ids)
     needs_approval = myreservations.filter(approved=False)
+    myreviews = Review.objects.filter(item_id__in=item_ids)
     context = {
         'me':current_profile,
         'items': items,
         'reservations':reservations,
         'myreservations':myreservations,
         'needs_approval':needs_approval,
+        'myreviews':myreviews,
     }
     return render(request, 'dashboard.html', context)
 
@@ -415,6 +417,7 @@ def rez_delete(request, rez_id):
 
 
 # ------------------------------------------------------------------- Add Review
+@login_required
 def add_review(request, item_id):
     error_message = ''
     item = Rental_Item.objects.get(id=item_id)
@@ -437,13 +440,35 @@ def add_review(request, item_id):
     }
     return render(request, 'add-review.html', context)
 
+# ------------------------------------------------------------------- Edit Review
 
+def edit_review(request, rev_id):
+    error_message = ''
+    review = Review.objects.get(id=rev_id)
+    item = Rental_Item.objects.get(id=review.item_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            return redirect('item_detail', item.id)
+        error_message = 'Invalid Form'
+    form = ReviewForm(instance=review)
+    context = {
+        'form':form,
+        'item':item,
+    }
+    return render(request, 'edit-review.html', context)
 
+# ------------------------------------------------------------------- Delete Review
+@login_required
+def delete_review(request, rev_id):
+    user = request.user
+    profile = Profile.objects.get(user_id=user.id)
+    review = Review.objects.get(id=rev_id)
+    item = Rental_Item.objects.get(id=review.item_id)
+    if review.author_id is not profile.id:
+        return redirect('home')
+    else:
+        review.delete()
+        return redirect('item_detail', item.id)
 
-
-# ------------------------------------------------------------------- Test
-
-def test(request, item_id):
-    # msg = 'hello world'
-    # return HttpResponse(msg)
-    return HttpResponse(get_reservations(item_id))
