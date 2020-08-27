@@ -69,7 +69,13 @@
                     <div class="media">
                         <div class="media-content">
                             <p class="title is-4">{{item.title}}</p>
-                            <p class="subtitle is-6">{{item.available}}</p>
+                            <p class="subtitle is-6">
+                                {% if item.available %}
+                                Available For Rent
+                                {% else %}
+                                Not Available
+                                {% endif %}
+                            </p>
                         </div>
                     </div>
                     <div class="content">

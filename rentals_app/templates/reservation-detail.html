@@ -31,6 +31,12 @@
     <p>
         {{rez.returned_date}}
     </p>
+    <p>
+        Reservation Total: ${{rez_total}}
+    </p>
+
+
+
     <a href="{% url 'item_detail' rez.item.id %}">
         <!-- If User is renting item -->
         <button class="button is-success is-outlined">Item</button></a>

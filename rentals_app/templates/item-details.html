@@ -1,49 +1,72 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="item-details-page">
 
-<div class="mt-6 box item-details-box">
-    
-    <div class="item-pics mx-3 my-3">
-        <img src={{item.picture}} alt={{item.title}}>
-    </div>
 
-    <div class="card mx-3 my-3">
-        <div class="card-content">
-            <p class="title is-4">{{item.title}}</p>
-            <a href="{% url 'profile' item.owner.id %}">
-            <div class="media">
-                <div class="media-left">
-                    <figure class="image is-48x48">
-                        <img src={{item.owner.image}} alt="Placeholder image">
-                    </figure>
-                </div>
-                <div class="media-content">
-                    <p class="subtitle is-6">{{item.owner}}</p>
-                </div>
-            </div></a>
-    
-            <div class="content">
-                {{item.description}}
+    <div class="mt-6 box item-details-box">
 
-            </div>
+        <div class="item-pics mx-3 my-3">
+            <img src={{item.picture}} alt={{item.title}}>
         </div>
-        <footer class="card-footer">
-            <p class="mx-3 my-3"> {{item.price}}/day</p>
-            <a href="{% url 'add_rez' item.id %}"><button href="" class="card-footer-item button is-success my-3 mx-3">Borrow This</button></a>
-        </footer>
-        {% if current_profile.id == item.owner_id %}
-        <footer class="card-footer">
-            <a href="{% url 'item_edit' item.id %}">
-                <button class="card-footer-item button is-info my-3 mx-3">Edit</button>
-            </a>
-            <a href="{% url 'item_delete' item.id %}">
-                <button class="card-footer-item button is-danger my-3 mx-3">Delete</button>
-            </a>
-        </footer>
-        {% endif %}
+
+        <div class="card mx-3 my-3">
+            <div class="card-content">
+                <p class="title is-4">{{item.title}}</p>
+                <a href="{% url 'profile' item.owner.id %}">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-48x48">
+                                <img src={{item.owner.image}} alt="Placeholder image">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <p class="subtitle is-6">{{item.owner}}</p>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="content">
+                    {{item.description}}
+
+                </div>
+                <p>
+                    {% if item.available %}
+                    Available For Rent
+                    {% else %}
+                    Not Available
+                    {% endif %}
+                </p>
+            </div>
+            <footer class="card-footer">
+                <p class="mx-3 my-3"> {{item.price}}/day</p>
+                <a href="{% url 'add_rez' item.id %}"><button href=""
+                        class="card-footer-item button is-success my-3 mx-3">Borrow This</button></a>
+            </footer>
+            {% if current_profile.id == item.owner_id %}
+            <footer class="card-footer">
+                <a href="{% url 'item_edit' item.id %}">
+                    <button class="card-footer-item button is-info my-3 mx-3">Edit</button>
+                </a>
+                <a href="{% url 'item_delete' item.id %}">
+                    <button class="card-footer-item button is-danger my-3 mx-3">Delete</button>
+                </a>
+            </footer>
+            {% endif %}
+        </div>
+    </div>
+    <div class="box card">
+        <h3 class="subtitle is-4">
+            Reservations
+        </h3>
+        {%for rez in reservations%}
+        <a href="{% url 'rez_detail' rez.id %}"><p>
+            {{rez.start_date}} - {{rez.end_date}}
+            {% endfor %}
+        </p></a>
     </div>
 </div>
+
 
 
 

@@ -187,9 +187,11 @@ def item_detail(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
+    reservations = Reservation.objects.filter(item_id=item.id)
     context = {
         'item':item,
         'current_profile':current_profile,
+        'reservations':reservations,
     }
 
     return render(request, 'item-details.html', context)
@@ -263,6 +265,7 @@ def add_rez(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
+    reservations = Reservation.objects.filter(item_id=item_id)
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
@@ -298,6 +301,7 @@ def add_rez(request, item_id):
         'form': form,
         'item': item,
         'error_message':error_message,
+        'reservations':reservations,
     }
     return render(request, 'add-reservation.html', context)
 
@@ -308,9 +312,14 @@ def rez_detail(request, rez_id):
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
     reservation = Reservation.objects.get(id=rez_id)
+    item = Rental_Item.objects.get(id=reservation.item_id)
+    rez_total = reservation.end_date - reservation.start_date
+    rez_total = rez_total.days*item.price
+    print(type(rez_total))
     context = {
         'rez':reservation,
         'current_profile':current_profile,
+        "rez_total":rez_total,
     }
     return render(request, 'reservation-detail.html', context)
 

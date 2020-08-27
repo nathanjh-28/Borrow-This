@@ -2,14 +2,30 @@
 
 {% block content %}
 
-<div class="box mt-6">
-    <h1 class="title is-1">Make a Reservation for {{item.title}}</h1>
-    <form class="add-item-form" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        {% if error_message %}<p class=" my-3 subtitle is-3 has-text-danger">{{ error_message }} </p>
-        {% endif %}
-        <input type="submit" class="button is-success" value="Create Reservation">
-    </form>
+<div class="add-rez-page">
+
+    <div class="box mt-6">
+        <h1 class="title is-1">Make a Reservation for {{item.title}}</h1>
+        <form class="add-item-form" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% if error_message %}<p class=" my-3 subtitle is-3 has-text-danger">{{ error_message }} </p>
+            {% endif %}
+            <input type="submit" class="button is-success" value="Create Reservation">
+        </form>
+    </div>
+    <div class="box card">
+        <h3 class="subtitle is-4">
+            Reservations
+        </h3>
+        {%for rez in reservations%}
+        <a href="{% url 'rez_detail' rez.id %}"><p>
+            {{rez.start_date}} - {{rez.end_date}}
+            {% endfor %}
+        </p></a>
+    </div>
 </div>
+
+
+
 {% endblock%}
