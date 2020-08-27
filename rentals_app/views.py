@@ -6,8 +6,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 # ------------------------------------------------------------------- Models, Forms
-from .models import Profile, Rental_Item, Reservation, Location, Category
-from .forms import ProfileForm, RentalItemForm, ReservationForm,OwnerReservationForm
+from .models import Profile, Rental_Item, Reservation, Location, Category, Review
+from .forms import ProfileForm, RentalItemForm, ReservationForm,OwnerReservationForm, ReviewForm
 
 
 from .validators import get_reservations, validate_date_range, validate_dates, validate_date_range_update, validate_min_rental
@@ -188,10 +188,12 @@ def item_detail(request, item_id):
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
     reservations = Reservation.objects.filter(item_id=item.id)
+    reviews = Review.objects.filter(item_id=item_id)
     context = {
         'item':item,
         'current_profile':current_profile,
         'reservations':reservations,
+        'reviews':reviews,
     }
 
     return render(request, 'item-details.html', context)
@@ -410,6 +412,34 @@ def rez_delete(request, rez_id):
         return redirect ('home')
     reservation.delete()
     return redirect('browse')
+
+
+# ------------------------------------------------------------------- Add Review
+def add_review(request, item_id):
+    error_message = ''
+    item = Rental_Item.objects.get(id=item_id)
+    profile = Profile.objects.get(user_id=request.user.id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid:
+            new_rev = form.save(commit=False)
+            new_rev.author = profile
+            new_rev.item = item
+            new_rev.save()
+            return redirect('item_detail', item_id)
+        else:
+            error_message = 'Form Invalid'
+    form = ReviewForm()
+    context = {
+        'form':form,
+        'item':item,
+        'error_message':error_message,
+    }
+    return render(request, 'add-review.html', context)
+
+
+
+
 
 # ------------------------------------------------------------------- Test
 

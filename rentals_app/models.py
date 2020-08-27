@@ -9,6 +9,9 @@ from datetime import date
 
 from django.core.exceptions import ValidationError
 
+# https://stackoverflow.com/questions/30849862/django-max-length-for-integerfield
+from django.core.validators import MaxValueValidator
+
 
 # -------------------------------------------------------------------  Django User Model
 from django.contrib.auth.models import User
@@ -102,18 +105,18 @@ class Reservation(models.Model):
 
 
 
-# -------------------------------------------------------------------  Item_Reviews Model
-
-# -------------------------------------------------------------------  User_Reviews Model
+# -------------------------------------------------------------------  Reviews Model
 
 
-# def validate_date_range(item_id, start_date, end_date):
-#     rez_list = Reservation.objects.filter(item_id=item_id)
-#     for booking in rez_list:
-#         if end_date >= booking.start_date:
-#             if start_date <= booking.end_date:
-#                 return False
-#             else:
-#                 return True
-#         else:
-#             return True
+class Review(models.Model):
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    item = models.ForeignKey(Rental_Item, on_delete=models.CASCADE,blank=True,null=True)
+    title = models.CharField(max_length=100)
+    body = models.CharField(max_length=1000)
+    stars = models.IntegerField(validators=[MaxValueValidator(5)])
+
+    def __str__(self):
+        return self.title
+
+
+

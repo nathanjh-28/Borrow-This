@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, Rental_Item, Reservation
+from .models import Profile, Rental_Item, Reservation, Review
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -57,3 +57,11 @@ class OwnerReservationForm(forms.ModelForm):
 
 
 # ---------------------------------------------------------  Reviews
+
+
+class ReviewForm(forms.ModelForm):
+    body = forms.CharField(widget=forms.Textarea)
+    class Meta:
+        model = Review
+        fields = ['title', 'stars', 'body']
+

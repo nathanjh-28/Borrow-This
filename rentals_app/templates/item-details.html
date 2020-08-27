@@ -70,9 +70,31 @@
         {%for rez in reservations%}
         <a href="{% url 'rez_detail' rez.id %}"><p>
             {{rez.start_date}} - {{rez.end_date}}
-            {% endfor %}
         </p></a>
+        {% endfor %}
     </div>
+
+    <div class="box card">
+        <h3 class="subtitle is-4">
+            Reviews
+            <a href="{% url 'add_review' item.id %}" class="button is-success">Add a Review</a>
+        </h3>
+        {%for rev in reviews%}
+        <p class="subtitle is-5">
+            {{rev.title}}
+            by {{rev.author}}
+            {{rev.stars}}stars
+        </p>
+        <p>
+            {{rev.body}}
+        </p>
+        <hr>
+
+            
+            {% endfor %}
+
+    </div>
+
 </div>
 
 
