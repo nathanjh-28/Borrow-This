@@ -126,9 +126,43 @@
             </div>
         </div>
         {% endfor %}
+    </section>
+
+
+
+
+    <!-- My Item's Reservations Section -->
+    <div class="profile-header">
+        <h3 class="subtitle is-3 profile-header-text">My Items' Reservations</h3>
+    </div>
+    <section class="my-things">
+        <div class="box dashboard-boxes my-rental-items">
+            {#}{% for i in '012'|make_list %}{#}
+            {% for rez in myreservations %}
+            <a href="{% url 'rez_detail' rez.id %}">
+                <div class="card my-rental-item mx-2 mb-2">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img src={{rez.item.picture}} alt="Placeholder image">
+                        </figure>
+                    </div>
+            </a>
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-content">
+                        <p class="title is-4">{{rez.occasion}}</p>
+                        <p class="subtitle is-6">{{rez.start_date}} - {{rez.end_date}}</p>
+                    </div>
+                </div>
+                <div class="content">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </section>
 </div>
-</section>
-</div>
+
 
 
 

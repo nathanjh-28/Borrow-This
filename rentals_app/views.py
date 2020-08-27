@@ -52,10 +52,15 @@ def dashboard(request):
     current_profile = Profile.objects.get(user_id=request.user.id)
     items = Rental_Item.objects.filter(owner_id=current_profile.id)
     reservations = Reservation.objects.filter(renter_id=current_profile.id)
+    item_ids = []
+    for item in items:
+        item_ids.append(item.id)
+    myreservations = Reservation.objects.filter(renter_id=current_profile.id).filter(item_id__in=item_ids)
     context = {
         'me':current_profile,
         'items': items,
         'reservations':reservations,
+        'myreservations':myreservations,
     }
     return render(request, 'dashboard.html', context)
 
