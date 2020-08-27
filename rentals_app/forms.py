@@ -7,6 +7,8 @@ class DateInput(forms.DateInput):
 class DateTimeInput(forms.DateTimeInput):
     input_type = 'datetime-local'
 
+from django.core.validators import MaxValueValidator
+
 # -- https://stackoverflow.com/questions/22846048/django-form-as-p-datefield-not-showing-input-type-as-date
 
 # -- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime#:~:text=The%20HTML%20%3Cinput%20type%3D%22,no%20longer%20supported%20in%20browsers.
@@ -61,6 +63,7 @@ class OwnerReservationForm(forms.ModelForm):
 
 class ReviewForm(forms.ModelForm):
     body = forms.CharField(widget=forms.Textarea)
+    stars = forms.IntegerField(validators=[MaxValueValidator(5)])
     class Meta:
         model = Review
         fields = ['title', 'stars', 'body']
