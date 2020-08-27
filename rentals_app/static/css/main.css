@@ -56,6 +56,16 @@ input, textarea {
     width: 80%;
 }
 
+.zoom:hover {
+    transform: scale(1.1);
+    transition-duration: .5s;
+    z-index: 10;
+}
+
+a {
+    color: inherit;
+} 
+
 
 /* home page layout
 ------------------------------------------- */
