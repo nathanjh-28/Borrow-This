@@ -75,6 +75,7 @@ class Reservation(models.Model):
     picked_up = models.BooleanField(default=False)
     returned_date = models.DateTimeField(blank=True, null=True)
     approved = models.BooleanField(default=False)
+    ready_for_pickup = models.BooleanField(default=False)
 
     def __str__(self):
         return f"""

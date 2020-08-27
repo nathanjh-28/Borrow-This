@@ -48,7 +48,7 @@ class ReservationForm(forms.ModelForm):
 class OwnerReservationForm(forms.ModelForm):
     class Meta:
         model = Reservation
-        fields = ['approved', 'picked_up','returned_date']
+        fields = ['approved', 'picked_up','returned_date', 'ready_for_pickup']
         widgets = {
             'returned_date':DateTimeInput(),
         }

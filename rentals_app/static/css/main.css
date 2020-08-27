@@ -37,6 +37,7 @@ footer {
 
 
 
+
 /* home page layout
 ------------------------------------------- */
 
@@ -177,6 +178,15 @@ width: 80%;
     justify-content: center;
 }
 
+.is-ready {
+    border: 3px solid #48C774;
+}
+
+.is-ready-text{
+    color: white;
+    background-color: #48C774;
+    padding: 5px;
+}
 
 /* Item Details Page
 -------------------------------------------------- */

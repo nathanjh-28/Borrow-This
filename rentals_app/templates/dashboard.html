@@ -114,11 +114,15 @@
     </div>
 
     <section class="my-things">
-        <div class="box dashboard-boxes my-rental-items">
+        <div class="box dashboard-boxes my-rental-items ">
             {#}{% for i in '012'|make_list %}{#}
             {% for rez in reservations %}
             <a href="{% url 'rez_detail' rez.id %}">
-                <div class="card my-rental-item mx-2 mb-2">
+                <div class="card my-rental-item mx-2 mb-2 
+                {% if rez.ready_for_pickup %}
+                is-ready
+                {% endif %}
+                ">
                     <div class="card-image">
                         <figure class="image is-4by3">
                             <img src={{rez.item.picture}} alt="Placeholder image">
@@ -130,6 +134,9 @@
                     <div class="media-content">
                         <p class="title is-4">{{rez.occasion}}</p>
                         <p class="subtitle is-6">{{rez.start_date}} - {{rez.end_date}}</p>
+                        {% if rez.ready_for_pickup %}
+                        <p class="is-ready-text">Ready for Pick Up!</p>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="content">
