@@ -189,6 +189,59 @@
         {% endfor %}
 
     </section>
+
+
+    <!-- My Item's Reviews -->
+    <div class="profile-header">
+        <h3 class="subtitle is-3 profile-header-text">My Items' Reviews</h3>
+    </div>
+    <section class="my-things">
+        <div class="box dashboard-boxes my-rental-items" id="my-items-rez">
+            {#}{% for i in '012'|make_list %}{#}
+            {% for rev in myreviews %}
+            <a href="{% url 'item_detail' rev.item.id %}">
+                <div class="card my-rental-item mx-2 mb-2">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img src={{rev.item.picture}} alt="Placeholder image">
+                        </figure>
+                    </div>
+            </a>
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-content">
+                        <p class="title is-4">{{rev.title}}</p>
+                        <p class="subtitle is-6">by {{rev.author}}</p>
+                        <br>
+                        {% if rev.stars >= 1 %}
+                        <i class="fas fa-star review-star"></i>
+                        {% endif %}
+                        {% if rev.stars >= 2 %}
+                        <i class="fas fa-star review-star"></i>
+                        {% endif %}
+                        {% if rev.stars >= 3 %}
+                        <i class="fas fa-star review-star"></i>
+                        {% endif %}
+                        {% if rev.stars >= 4 %}
+                        <i class="fas fa-star review-star"></i>
+                        {% endif %}
+                        {% if rev.stars == 5 %}
+                        <i class="fas fa-star review-star"></i>
+                        {% endif %}
+                        <br>
+                    </div>
+                </div>
+                <div class="content">
+                    {{rev.body|truncatewords:10}}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </section>
+
+
+
 </div>
 
 

@@ -57,12 +57,14 @@ def dashboard(request):
         item_ids.append(item.id)
     myreservations = Reservation.objects.filter(item_id__in=item_ids)
     needs_approval = myreservations.filter(approved=False)
+    myreviews = Review.objects.filter(item_id__in=item_ids)
     context = {
         'me':current_profile,
         'items': items,
         'reservations':reservations,
         'myreservations':myreservations,
         'needs_approval':needs_approval,
+        'myreviews':myreviews,
     }
     return render(request, 'dashboard.html', context)
 
