@@ -6,16 +6,42 @@
 <div class="dashboard-page">
     <div class="mt-6">
     </div>
-        {% if needs_approval|length > 0 %}
-        <a href="#my-items-rez" class="button is-success">Reservations Need Approval!</a>
-        {% endif %}
+
+    {% if needs_approval|length > 0 %}
+    <a onclick="tabClick('.my-item-rez-tab','d')" class="button is-success">Reservations Need Approval!</a>
+    {% endif %}
+
+
+    <div class="tabs is-centered is-boxed my-3">
+        <ul>
+            <li class="is-active" id="a">
+                <a onclick="tabClick('.profile-tab','a')" >My Profile</a>
+            </li>
+            <li id="b">
+                <a onclick="tabClick('.items-tab','b')">My Items</a>
+            </li>
+            <li id="c">
+                <a onclick="tabClick('.my-rez-tab','c')">My Reservations</a>
+            </li>
+            <li id="d">
+                <a onclick="tabClick('.my-item-rez-tab','d')">My Items' Reservations</a>
+            </li>
+            <li id="e">
+                <a onclick="tabClick('.my-reviews-tab','e')" >My Reviews</a>
+            </li>
+
+        </ul>
+    </div>
+
+
+
 
     <!-- Profile Info -->
-    <div class="profile-header">
-        <h3 class="subtitle is-3 profile-header-text">About Me</h3>
-    </div>
-    <section class="profile-section">
-        <div class="box profile dashboard-boxes mb-3">
+    <!-- <div class="profile-header profile-tab">
+        <h3 class="subtitle is-3 profile-header-text ">My Profile</h3>
+    </div> -->
+    <div class="profile-section profile-tab">
+        <div class="box profile dashboard-boxes mb-3 ">
             <article class="media">
                 <div class="media-left">
                     <figure class="image profile-pic">
@@ -44,16 +70,16 @@
                 </a>
             </div>
         </div>
-    </section>
+    </div>
 
 
     <!-- My Items Section -->
-    <div class="profile-header">
+    <!-- <div class="profile-header items-tab hidden">
         <h3 class="subtitle is-3 profile-header-text">My Items</h3>
-        <a href="{% url 'add_item' %}"><button class="button is-success mx-3">Add Item</button>
-    </div></a>
+        <a href="{% url 'add_item' %}"><button class="button is-success mx-3">Add Item</button></a>
+    </div> -->
 
-    <section class="my-things">
+    <section class="my-things items-tab hidden">
         <div class="box dashboard-boxes my-rental-items">
             {#}{% for i in '012'|make_list %}{#}
             {% for item in items %}
@@ -109,11 +135,11 @@
     </section>
 
     <!-- My Reservations Section -->
-    <div class="profile-header">
+    <!-- <div class="profile-header my-rez-tab hidden">
         <h3 class="subtitle is-3 my-3 profile-header-text">My Reservations</h3>
-    </div>
+    </div> -->
 
-    <section class="my-things">
+    <section class="my-things my-rez-tab hidden">
         <div class="box dashboard-boxes my-rental-items ">
             {#}{% for i in '012'|make_list %}{#}
             {% for rez in reservations %}
@@ -150,10 +176,10 @@
 
 
     <!-- My Item's Reservations Section -->
-    <div class="profile-header">
+    <!-- <div class="profile-header my-item-rez-tab hidden">
         <h3 class="subtitle is-3 my-3 profile-header-text">My Items' Reservations</h3>
-    </div>
-    <section class="my-things">
+    </div> -->
+    <section class="my-things my-item-rez-tab hidden">
         <div class="box dashboard-boxes my-rental-items" id="my-items-rez">
             {#}{% for i in '012'|make_list %}{#}
             {% for rez in myreservations %}
@@ -192,10 +218,10 @@
 
 
     <!-- My Item's Reviews -->
-    <div class="profile-header">
+    <!-- <div class="profile-header my-reviews-tab hidden">
         <h3 class="subtitle is-3 my-3 profile-header-text">My Items' Reviews</h3>
-    </div>
-    <section class="my-things">
+    </div> -->
+    <section class="my-things my-reviews-tab hidden">
         <div class="box dashboard-boxes my-rental-items" id="my-items-rez">
             {#}{% for i in '012'|make_list %}{#}
             {% for rev in myreviews %}
@@ -244,6 +270,43 @@
 
 </div>
 
+<script>
+        
+    const profile = document.querySelector('.profile-tab')
+    const items = document.querySelector('.items-tab')
+    const myRez = document.querySelector('.my-rez-tab')
+    const myItemsRez = document.querySelector('.my-item-rez-tab')
+    const myReviews = document.querySelector('.my-reviews-tab')
+    
+    const a = document.getElementById('a')
+    const b = document.getElementById('b')
+    const c = document.getElementById('c')
+    const d = document.getElementById('d')
+    const e = document.getElementById('e')
+
+    function tabClick(element, link){
+        
+        if(!profile.classList.contains("hidden"))profile.classList.add("hidden");
+        if(!items.classList.contains("hidden"))items.classList.add("hidden"); 
+        if(!myRez.classList.contains("hidden"))myRez.classList.add("hidden");
+        if(!myItemsRez.classList.contains("hidden"))myItemsRez.classList.add("hidden");
+        if(!myReviews.classList.contains("hidden"))myReviews.classList.add("hidden");
+        
+        if(a.classList.contains("is-active")) a.classList.remove("is-active");
+        if(b.classList.contains("is-active")) b.classList.remove("is-active");
+        if(c.classList.contains("is-active")) c.classList.remove("is-active");
+        if(d.classList.contains("is-active")) d.classList.remove("is-active");
+        if(e.classList.contains("is-active")) e.classList.remove("is-active");
+        
+        el = document.querySelector(element)
+        console.log(element)
+        console.log(link)
+        li = document.getElementById(link)
+        el.classList.remove("hidden")
+        li.classList.add("is-active")
+    }
+
+</script>
 
 
 

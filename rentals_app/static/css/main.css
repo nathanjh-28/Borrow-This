@@ -186,6 +186,7 @@ width: 80%;
 .dashboard-page{
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .edit-delete-account{
@@ -196,6 +197,11 @@ width: 80%;
 .profile-section {
     display:flex;
     justify-content: center;
+    width: 100%;
+}
+
+.dashboard-boxes {
+    width: 100%;
 }
 
 .profile-pic img {
@@ -253,5 +259,12 @@ width: 80%;
 ---------------------------------------------------- */
 
 .helptext, .signup-form ul {
+    display: none;
+}
+
+
+
+.hidden {
+    position: absolute;
     display: none;
 }
