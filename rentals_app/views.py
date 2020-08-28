@@ -184,9 +184,14 @@ def browse_loc_cat(request, loc_id, cat_id):
 def profile(request, profile_id):
     profile = Profile.objects.get(id=profile_id)
     items = Rental_Item.objects.filter(owner_id=profile.id)
+    item_list = []
+    for item in items:
+        item_list.append(item.id)
+    reservations = Reservation.objects.filter(item_id__in=item_list)
     context = {
         'profile':profile,
         'items':items,
+        'reservations':reservations,
     }
     return render(request, 'public-profile.html', context)
 

@@ -217,7 +217,7 @@ width: 80%;
 .my-rental-item{
     flex-grow: 0;
     flex-shrink: 1;
-    width: 30%;
+    width: 23%;
 }
 .profile-header{
     display: flex;
