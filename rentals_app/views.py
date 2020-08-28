@@ -1,16 +1,24 @@
 # ------------------------------------------------------------------- Methods
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+# ------------------------------------------------------------------- Method For Today's Date
+from datetime import date
 # ------------------------------------------------------------------- Auth 
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 # ------------------------------------------------------------------- Models, Forms
+
 from .models import Profile, Rental_Item, Reservation, Location, Category, Review
 from .forms import ProfileForm, RentalItemForm, ReservationForm,OwnerReservationForm, ReviewForm
 
+# ------------------------------------------------------------------- Rez Validators
+from .validators import validate_rez, validate_rez_update
 
-from .validators import get_reservations, validate_date_range, validate_dates, validate_date_range_update, validate_min_rental
+
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
 
 
 
@@ -51,11 +59,11 @@ def dashboard(request):
     user = request.user
     current_profile = Profile.objects.get(user_id=request.user.id)
     items = Rental_Item.objects.filter(owner_id=current_profile.id)
-    reservations = Reservation.objects.filter(renter_id=current_profile.id)
+    reservations = Reservation.objects.filter(renter_id=current_profile.id).order_by('start_date')
     item_ids = []
     for item in items:
         item_ids.append(item.id)
-    myreservations = Reservation.objects.filter(item_id__in=item_ids)
+    myreservations = Reservation.objects.filter(item_id__in=item_ids).order_by('start_date')
     needs_approval = myreservations.filter(approved=False)
     myreviews = Review.objects.filter(item_id__in=item_ids)
     context = {
@@ -177,20 +185,29 @@ def browse_loc_cat(request, loc_id, cat_id):
 def profile(request, profile_id):
     profile = Profile.objects.get(id=profile_id)
     items = Rental_Item.objects.filter(owner_id=profile.id)
+    item_list = []
+    for item in items:
+        item_list.append(item.id)
+    reservations = Reservation.objects.filter(item_id__in=item_list)
     context = {
         'profile':profile,
         'items':items,
+        'reservations':reservations,
     }
     return render(request, 'public-profile.html', context)
 
 # ------------------------------------------------------------------- Item Details
 
 def item_detail(request, item_id):
+    current_profile = ''
     item = Rental_Item.objects.get(id=item_id)
-    user = request.user
-    current_profile = Profile.objects.get(user_id=user.id)
-    reservations = Reservation.objects.filter(item_id=item.id)
+    reservations = Reservation.objects.filter(item_id=item.id).order_by('start_date')
     reviews = Review.objects.filter(item_id=item_id)
+    print('hi Nathan')
+    print(request.user)
+    if request.user == 'AnonymousUser':
+        user = request.user
+        current_profile = Profile.objects.get(user_id=user.id)
     context = {
         'item':item,
         'current_profile':current_profile,
@@ -213,8 +230,7 @@ def add_item (request):
             current_profile = Profile.objects.get(user_id=user.id)
             new_item.owner_id = current_profile.id
             new_item.save()
-            index = new_item.id
-            return redirect('item_detail', index)
+            return redirect('item_detail', new_item.id)
         else: error_message = form.errors
     form = RentalItemForm
     context = {
@@ -269,48 +285,23 @@ def add_rez(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
-    reservations = Reservation.objects.filter(item_id=item_id)
+    reservations = Reservation.objects.filter(item_id=item_id).order_by('start_date')
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
             new_rez = form.save(commit=False)
             new_rez.renter_id = current_profile.id
             new_rez.item_id = item.id
-            if validate_date_range(item_id,new_rez.start_date,new_rez.end_date):
-                if validate_dates(new_rez.start_date,new_rez.end_date):
-                    if validate_min_rental(item.min_rental,new_rez.start_date,new_rez.end_date):
-                        new_rez.save()
-                        return redirect ('home')
-                    else:
-                        error_message = f"You must rent this item for at least {item.min_rental} days"
-                        new_rez.save()
-                        new_rez.delete()
-                        context_err = {
-                        'form': form,
-                        'item': item,
-                        'error_message':error_message,
-                        }
-                        return render(request, 'add-reservation.html', context_err)
-                else:
-                    error_message = 'Your start date must be before your end date'
-                    new_rez.save()
-                    new_rez.delete()
-                    context_err = {
-                    'form': form,
-                    'item': item,
-                    'error_message':error_message,
-                    }
-                    return render(request, 'add-reservation.html', context_err)
+            # ----- Validate Reservation
+            a, b, c, d, e = date.today(), item.id, item.min_rental, new_rez.start_date, new_rez.end_date
+            msg = validate_rez(a,b,c,d,e)
+            if not msg:
+                new_rez.save()
+                return redirect('rez_detail', new_rez.id)
             else:
-                error_message = 'Sorry!  Those dates overlap with a current reservation!'
+                error_message = msg
                 new_rez.save()
                 new_rez.delete()
-                context_err = {
-                    'form': form,
-                    'item': item,
-                    'error_message':error_message,
-                    }
-                return render(request, 'add-reservation.html', context_err)
         else: error_message = 'invalid submission'
     context = {
         'form': form,
@@ -354,17 +345,14 @@ def rez_edit(request, rez_id):
         form = ReservationForm(request.POST, instance=reservation)
         if form.is_valid():
             updated_rez = form.save(commit=False)
-            a = updated_rez.item_id
-            b = updated_rez.start_date
-            c = updated_rez.end_date
-            if validate_date_range_update(rez_id,a,b,c):
-                if validate_dates (b,c):
-                    updated_rez.save()
-                    return redirect('rez_detail', rez_id)
-                else:
-                    error_message = 'Start Date must occur before End Date'
+            # ------ Validate Reservation Update
+            a,b,c,d,e,f = rez_id, date.today(), updated_rez.item_id, item.min_rental, updated_rez.start_date, updated_rez.end_date
+            msg = validate_rez_update(a,b,c,d,e,f)
+            if not msg:
+                updated_rez.save()
+                return redirect('rez_detail', rez_id)
             else:
-                error_message = 'Conflicting Dates'
+                error_message = msg
         else:
             error_message = 'Invalid'
     form = ReservationForm(instance=reservation)
@@ -378,7 +366,7 @@ def rez_edit(request, rez_id):
 
 # ------------------------------------------------------------------- Reservation Revise by Owner
 
-
+@login_required
 def rez_edit_owner(request, rez_id):
     error_message = ''
     rez = Reservation.objects.get(id=rez_id)
@@ -442,6 +430,7 @@ def add_review(request, item_id):
 
 # ------------------------------------------------------------------- Edit Review
 
+@login_required
 def edit_review(request, rev_id):
     error_message = ''
     review = Review.objects.get(id=rev_id)

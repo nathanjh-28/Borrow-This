@@ -4,13 +4,13 @@
 <div class="item-details-page">
 
 
-    <div class="mt-6 box item-details-box">
-
-        <div class="item-pics mx-3 my-3">
-            <img src={{item.picture}} alt={{item.title}}>
-        </div>
-
-        <div class="card mx-3 my-3">
+    <div class="columns">
+        <div class="mt-6 item-details-box">
+            <div class="item-pics mx-3 my-3 column">
+                <img src={{item.picture}} alt={{item.title}}>
+            </div>
+    
+        <div class="card mx-3 my-3 item-details column">
             <div class="card-content">
                 <p class="title is-4">{{item.title}}</p>
                 <a href="{% url 'profile' item.owner.id %}">
@@ -25,11 +25,11 @@
                         </div>
                     </div>
                 </a>
-
-                <div class="content">
+    
+                <div class="content mt-3">
                     {{item.description}}
                     <p>
-                        Minimum Rental Period: 
+                        Minimum Rental Period:
                         {{item.min_rental}}
                         {% if item.min_rental == 1 %}
                         day
@@ -48,9 +48,9 @@
             </div>
             <footer class="card-footer">
                 <p class="mx-3 my-3"> {{item.price}}/day</p>
-                <a href="{% url 'add_rez' item.id %}"><button href=""
-                        class="card-footer-item button is-success my-3 mx-3">Borrow This</button></a>
             </footer>
+            <a href="{% url 'add_rez' item.id %}"><button href=""
+                    class="card-footer-item button is-success my-3 mx-3">Borrow This</button></a>
             {% if current_profile.id == item.owner_id %}
             <footer class="card-footer">
                 <a href="{% url 'item_edit' item.id %}">
@@ -62,16 +62,19 @@
             </footer>
             {% endif %}
         </div>
+        
+        <div class="my-3 mx-3 box card">
+            <h3 class="subtitle is-4">
+                Reservations
+            </h3>
+            {%for rez in reservations%}
+            <a href="{% url 'rez_detail' rez.id %}"><p>
+                {{rez.start_date}} - {{rez.end_date}}
+            </p></a>
+            {% endfor %}
+        </div>
     </div>
-    <div class="box card">
-        <h3 class="subtitle is-4">
-            Reservations
-        </h3>
-        {%for rez in reservations%}
-        <a href="{% url 'rez_detail' rez.id %}"><p>
-            {{rez.start_date}} - {{rez.end_date}}
-        </p></a>
-        {% endfor %}
+
     </div>
     <div>
         <a href="{% url 'add_review' item.id %}" class="button is-success">Add a Review</a>

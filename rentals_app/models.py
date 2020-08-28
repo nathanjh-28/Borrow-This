@@ -4,9 +4,6 @@ from django.db import models
 from django.urls import reverse
 from datetime import date
 
-#--- my validators
-# from .validators import validate_date_range
-
 from django.core.exceptions import ValidationError
 
 # https://stackoverflow.com/questions/30849862/django-max-length-for-integerfield
@@ -50,11 +47,6 @@ class Rental_Item(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=2000)
-    # ListCharField? https://django-mysql.readthedocs.io/en/latest/model_fields/list_fields.html
-    # pictures = models.ListCharField(
-    #     base_field=CharField(max_length=20),
-    #     size=6, 
-    #     max_length=(6*20))
     picture = models.URLField('Picture (URL)', max_length=200, blank=True)
     link = models.URLField('Link To Producte Page',max_length=200,blank=True)
     available = models.BooleanField()
@@ -90,30 +82,23 @@ class Reservation(models.Model):
         End {self.end_date}
         """
 
-    # def clean():
-    #     if not validate_date_range(self.item_id, self.start_date, self.end_date):
-    #         raise ValidationError(_('Dates Conflict.  The dates you selected overlap with a preexisting reservation'))
-    
-    # def clean(self):
-    #     rez_list = Reservation.objects.filter(item_id=self.item_id)
-    #     for booking in rez_list:
-    #         if self.end_date >= booking.start_date:
-    #             if self.start_date <= booking.end_date:
-    #                     raise ValidationError(_('Dates Conflict.  The dates you selected overlap with a preexisting reservation'))
-
-
-
-
 
 # -------------------------------------------------------------------  Reviews Model
 
-
 class Review(models.Model):
+
+    class Stars(models.IntegerChoices):
+        One_Star = 1
+        Two_Star = 2
+        Three_Star = 3
+        Four_Star = 4
+        Five_Star = 5
+
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     item = models.ForeignKey(Rental_Item, on_delete=models.CASCADE,blank=True,null=True)
     title = models.CharField(max_length=100)
     body = models.CharField(max_length=1000)
-    stars = models.IntegerField(validators=[MaxValueValidator(5)])
+    stars = models.IntegerField(choices=Stars.choices)
 
     def __str__(self):
         return self.title

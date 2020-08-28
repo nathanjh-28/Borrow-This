@@ -1,10 +1,19 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Playfair+Display:ital,wght@0,400;0,700;1,800&display=swap');
 
 body {
     background-color: whitesmoke;
     display:flex;
     min-height: 100vh;
     flex-direction: column;
+}
+
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.title{
+    font-family: 'Playfair Display', serif;
 }
 
 main {
@@ -23,6 +32,7 @@ footer {
 
 .blue-logo{
     color: #0794D2;
+    font-size: 1.25em;
 }
 
 .navbar {
@@ -35,7 +45,51 @@ footer {
     background-color: whitesmoke;
 }
 
+input, textarea {
+    display: block;
+    width: 100%;
+    font-size: large;
+    margin-bottom: 1em;
+}
 
+input[type=checkbox]{
+    width: auto;
+    display: inline;
+}
+input[type=radio]{
+    width: auto;
+    display: inline;
+}
+#id_stars{
+    display: flex;
+}
+
+#id_stars_0,
+#id_stars_1,
+#id_stars_2,
+#id_stars_3,
+#id_stars_4 {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.width-80 {
+    width: 80%;
+}
+
+.zoom:hover {
+    transform: scale(1.1);
+    transition-duration: .5s;
+    z-index: 10;
+}
+
+a {
+    color: inherit;
+} 
+
+.min-ht-column {
+    min-height: 80%;
+}
 
 
 /* home page layout
@@ -57,7 +111,10 @@ footer {
     justify-content: center;
     flex-direction: column;
     align-items: center;
+}
 
+.hero.is-fullheight {
+    min-height: 95vh;
 }
 
 .hero-text {
@@ -116,6 +173,7 @@ width: 80%;
     /* justify-content: center; */
     flex-direction: column;
     background-color: whitesmoke;
+    width: 100%;
 }
 
 /* parent of the header */
@@ -130,6 +188,7 @@ width: 80%;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
+    width: 100%;
 }
 /* child of rental items */
 .br-rental-item{
@@ -146,6 +205,7 @@ width: 80%;
 .dashboard-page{
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .edit-delete-account{
@@ -156,6 +216,11 @@ width: 80%;
 .profile-section {
     display:flex;
     justify-content: center;
+    width: 100%;
+}
+
+.dashboard-boxes {
+    width: 100%;
 }
 
 .profile-pic img {
@@ -171,7 +236,7 @@ width: 80%;
 .my-rental-item{
     flex-grow: 0;
     flex-shrink: 1;
-    width: 30%;
+    width: 23%;
 }
 .profile-header{
     display: flex;
@@ -193,11 +258,16 @@ width: 80%;
 
 .item-details-box{
     width: 100%;
+    height: 40%;
     display: flex;
 }
 
 .item-pics{
-    width: 50%;
+    width: 22%;
+}
+
+.item-details {
+    width: 22%;
 }
 
 .review-star{
@@ -208,5 +278,12 @@ width: 80%;
 ---------------------------------------------------- */
 
 .helptext, .signup-form ul {
+    display: none;
+}
+
+
+
+.hidden {
+    position: absolute;
     display: none;
 }
