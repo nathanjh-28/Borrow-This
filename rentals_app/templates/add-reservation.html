@@ -3,8 +3,7 @@
 {% block content %}
 
 <div class="add-rez-page width-80">
-
-    <div class="box mt-6">
+    <div class="my-6">
         <h1 class="title is-1">Make a Reservation for {{item.title}}</h1>
         <h3 class="subtitle">Minimum Rental Period: {{item.min_rental}}
             {% if item.min_rental == 1 %}
@@ -13,23 +12,36 @@
             days
             {% endif %}
         </h3>
-        <form class="add-item-form" method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            {% if error_message %}<p class=" my-3 subtitle is-3 has-text-danger">{{ error_message }} </p>
-            {% endif %}
-            <input type="submit" class="button is-success my-3" value="Create Reservation">
-        </form>
+        {% if error_message %}<p class=" my-3 subtitle is-5 has-text-danger">{{ error_message }} </p>
+        {% endif %}
+
     </div>
-    <div class="box card">
-        <h3 class="subtitle is-4">
-            Reservations
-        </h3>
-        {%for rez in reservations%}
-        <a href="{% url 'rez_detail' rez.id %}"><p>
-            {{rez.start_date}} - {{rez.end_date}}
-            {% endfor %}
-        </p></a>
+    <div class="columns min-ht-column">
+
+
+        <div class="box mx-3 column ">
+            <form class="add-item-form" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" class="button is-success my-3" value="Create Reservation">
+            </form>
+        </div>
+        <div class="box card mx-3 column">
+            <h3 class="subtitle is-4">
+                Reservations
+            </h3>
+            {%for rez in reservations%}
+            <a href="{% url 'rez_detail' rez.id %}"><p>
+                {{rez.start_date}} - {{rez.end_date}}
+                {% endfor %}
+            </p></a>
+        </div>
+        <div class="column mx-3">
+            <a href="{% url 'item_detail' item.id %}">
+                <img src="{{item.picture}}" alt="">
+                </a>
+        </div>
+
     </div>
 </div>
 

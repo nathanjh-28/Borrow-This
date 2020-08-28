@@ -58,11 +58,11 @@ def dashboard(request):
     user = request.user
     current_profile = Profile.objects.get(user_id=request.user.id)
     items = Rental_Item.objects.filter(owner_id=current_profile.id)
-    reservations = Reservation.objects.filter(renter_id=current_profile.id)
+    reservations = Reservation.objects.filter(renter_id=current_profile.id).order_by('start_date')
     item_ids = []
     for item in items:
         item_ids.append(item.id)
-    myreservations = Reservation.objects.filter(item_id__in=item_ids)
+    myreservations = Reservation.objects.filter(item_id__in=item_ids).order_by('start_date')
     needs_approval = myreservations.filter(approved=False)
     myreviews = Review.objects.filter(item_id__in=item_ids)
     context = {
@@ -196,7 +196,7 @@ def item_detail(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
-    reservations = Reservation.objects.filter(item_id=item.id)
+    reservations = Reservation.objects.filter(item_id=item.id).order_by('start_date')
     reviews = Review.objects.filter(item_id=item_id)
     context = {
         'item':item,
@@ -276,7 +276,7 @@ def add_rez(request, item_id):
     item = Rental_Item.objects.get(id=item_id)
     user = request.user
     current_profile = Profile.objects.get(user_id=user.id)
-    reservations = Reservation.objects.filter(item_id=item_id)
+    reservations = Reservation.objects.filter(item_id=item_id).order_by('start_date')
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():

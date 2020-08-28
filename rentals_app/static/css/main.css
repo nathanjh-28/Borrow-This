@@ -52,6 +52,11 @@ input, textarea {
     margin-bottom: 1em;
 }
 
+input[type=checkbox]{
+    width: auto;
+    display: inline;
+}
+
 .width-80 {
     width: 80%;
 }
@@ -65,6 +70,10 @@ input, textarea {
 a {
     color: inherit;
 } 
+
+.min-ht-column {
+    min-height: 80%;
+}
 
 
 /* home page layout
@@ -145,6 +154,7 @@ width: 80%;
     /* justify-content: center; */
     flex-direction: column;
     background-color: whitesmoke;
+    width: 100%;
 }
 
 /* parent of the header */
@@ -159,6 +169,7 @@ width: 80%;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
+    width: 100%;
 }
 /* child of rental items */
 .br-rental-item{
@@ -222,11 +233,16 @@ width: 80%;
 
 .item-details-box{
     width: 100%;
+    height: 40%;
     display: flex;
 }
 
 .item-pics{
-    width: 50%;
+    width: 22%;
+}
+
+.item-details {
+    width: 22%;
 }
 
 .review-star{
