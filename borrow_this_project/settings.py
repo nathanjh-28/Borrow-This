@@ -32,6 +32,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['https://borrow-this.herokuapp.com/']
 
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 # Application definition
 
