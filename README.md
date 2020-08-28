@@ -1,7 +1,21 @@
-# Borrow This
+# [Borrow This](https://borrow-this.herokuapp.com/)
 A Peer to Peer Rental Community
-## Scope:  
-Build a web application similar to craigslist, sharegrid, or AirBnB where users can post items for rent and make reservations for those items.  
+
+![Home](./staticfiles/home.png)
+
+## Scope:
+Build a web application similar to craigslist, sharegrid, or AirBnB where users can post items for rent and make reservations for those items. In addition users can decide how much money they want to charge, whether to approve reservations, and give reviews for items on the website.  
+
+## Wireframes:
+#### Home
+![Figma Wireframe](./staticfiles/wireframe-home.png)
+#### User Dashboard
+![Figma Wireframe Dashboard](./staticfiles/wireframe-dashboard.png)
+#### Browse
+![Figma Wireframe Browse](./staticfiles/wireframe-browse.png)
+
+## [Figma Wireframes Link](https://www.figma.com/file/wD8z1SBVXa3xsu1Xz7D43L/P2P-Rental-Community?node-id=1%3A2)
+
 ## User Stories:
 - A user creates a profile upon signing up.  This includes a profile image, a bio, and location.  
 - A user may browse through items for rent by visiting the browse page.  They can filter by or category or location.
@@ -14,34 +28,43 @@ Build a web application similar to craigslist, sharegrid, or AirBnB where users 
 - A User can see past reservations as well.  
 - A user can visit another user’s page via a link on a rental item or reservation.
 - A user may visit the website and see items for rent but if they are not signed in, they cannot make a reservation.  
-##### 1st Stretch:
 - A User cannot make a reservation for an item that is already reserved or out.
-Image upload for rental items  
 
-### Stretch User Stories:
-Rental Items:
-- Cancellation Policy
-- Late Fees
-- Rental Terms (weekends are free etc)
-- Minimum Rental Period (reservation won’t submit if minimum is not met)
-- Prepped and ready for pick up
-- Location
-- Invoices Generated based on price and length of reservation
-- User can see invoices on their dashboard page
-- Reviews for rental items
-- Comments for reviews
+![ERD](./staticfiles/erd.png)
 
-### More Stretch User Stories:
-- Calendar Implementation, book using calendar and block people through calendar
-- Model for L and D, Loss and Damages
-- Foreign Key for item, order, description of damages.  Repair costs.
-- Google Maps implementation for location of items
-- Chat feature between users, once a reservation has been placed or if they have questions.
-#### Emails sent when
-- You sign up
-- Your reservation is made
-- Someone reserves your item
-- When an item is due back
+
+## Reservation Validation
+Something I am particularly proud of other than all the functionality this site has to offer is the validations I created for the make and update reservations.  The biggest hurdle was creating a validation that would prevent double booking of a rental item.  From there I kept adding more validations as they made sense.  
+
+```python
+#  Validate New Rez
+
+def validate_rez(today, item_id, length, start, end):
+    if start < today:
+        return "You cannot make reservations for the past, please speak with admin"
+    if start > end:
+        return 'Your start date must be before your end date'
+    rental_period = end-start
+    rental_period = rental_period.days
+    if rental_period < length:
+        return f"You must rent this item for at least {length} days"
+    rez_list = Reservation.objects.filter(item_id=item_id)
+    for booking in rez_list:
+        if end >= booking.start_date:
+            if start <= booking.end_date:
+                return 'Sorry!  Those dates overlap with a current reservation'
+    return ''
+
+```
+## Unresolved Problems
+There are still more validations to figure out to make the web application more battle proof for people to make reservations.  Aside from that, there are not many unresolved problems.  
+
+## Future Features
+- browse page by default goes to user's location rather than all locations
+- I would love to see a google maps implementation as well as chat so that users can discuss a reservation.  
+- I would like for users to upload multiple pictures for items and have a carousel on the item details page.  
+- A search bar for items.  
+- A model and system in place to handle if an item is lost or damaged.  
 
 
 ## Technologies:
@@ -50,62 +73,24 @@ Rental Items:
 - Templates: Django Templating Language
 - Database: PostgreSQL
 - Heroku for Deployment
-- AWS S3 for image storage
 
-## Milestones and Sprints (Due Date Times are EOD):
-### Milestone 1: A Finished Looking App - Due Fri Aug 21
-#### Sprint 1: Basic Templates and User Sign Up
-- Start Repo, Start Django App
-- Navbar with links
-- Create basic templates based on wireframes with template data
-- Home Page
-- Browse Items Page
-- User Dashboard
-- Item Details
-- User Info (probably similar to User Dashboard)
-- About Me Section
-- Basic Styling of templates
-- Sign Up Form and Login Form Page
-- Create a User account, login and logout.
+## Runtime Language
+- python-3.7.7
 
-### Milestone 2: Full Crud - Due Mon Aug 24
-#### Sprint 2 - Rental Items
-- Add Form to Rental Item Form Page
-- Added Rental Items appear on Browse Items
-- Added Rental Items appear on Dashboard
-- Added Rental Items appear on User’s Public Page
-- Rental Items come with their details page
-- Rental item has link to the user that posted the item
+## Dependencies
+(some of these I downloaded while playing with sockets so they may not be necessary to run the app)
+- asgiref==3.2.10
+- dj-database-url==0.5.0
+- Django==3.1
+- django-on-heroku==1.0.1
+- gunicorn==20.0.4
+- monotonic==1.5
+- psycopg2==2.8.5
+- psycopg2-binary==2.8.5
+- python-engineio==3.13.2
+- python-socketio==4.6.0
+- pytz==2020.1
+- six==1.15.0
+- sqlparse==0.3.1
+- whitenoise==5.2.0
 
-#### Sprint 3 - Reservations and finish CRUD
-- Select item and be taken to reservation form page
-- Make reservations by hitting submit
-- See reservations on dashboard page, your item or your reservation
-- Update and Delete for Rental Items
-- Update and Delete for Reservations
-
-### Milestone 3: Validation - Due Tues Aug 25
-#### Sprint 4 - Validation and Image Upload
-- Image upload for rental items and profile pictures
-#### Validation:
-- User can only edit their own rental items
-- User can only edit their own reservation
-- User cannot make a reservation that conflicts with another reservation
-- User can browse site without signing up but can’t make reservations. 
-- Navbar changes depending on if they are logged in
-
-### Milestone 4: Stretching the Features
-#### Stretch Sprint 1 - More Functionality
-- Add Categories and Location to Rental Items
-- Filter Browse Items page by category and/or by location
-- Calendar implementation
-- Pop Up calendar for making reservations
-- See dates crossed out on calendar for days not available
-- Rental Price added to items
-- Calculate Total when making reservation
-- Total amount for reservations appear on dashboard
-
-#### Final Sprint - Styling
-- After feature freeze, finalize styling.
-- Deploy to Heroku
-- Finalize ReadME
