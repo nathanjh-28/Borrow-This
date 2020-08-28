@@ -205,6 +205,7 @@ def profile(request, profile_id):
 
 # ------------------------------------------------------------------- Item Details
 
+@login_required
 def item_detail(request, item_id):
     current_profile = ''
     item = Rental_Item.objects.get(id=item_id)
@@ -299,7 +300,7 @@ def add_rez(request, item_id):
             new_rez = form.save(commit=False)
             new_rez.renter_id = current_profile.id
             new_rez.item_id = item.id
-            # ----- Validate Reservation
+            # ----- Validate New Rez
             a, b, c, d, e = date.today(), item.id, item.min_rental, new_rez.start_date, new_rez.end_date
             msg = validate_rez(a,b,c,d,e)
             if not msg:
