@@ -29,9 +29,7 @@
         <p class="my-3">
             Reservation Total: <span class="has-text-weight-bold">${{rez_total}} </span>
         </p>
-    
-    
-    
+
         <a href="{% url 'item_detail' rez.item.id %}">
             <!-- If User is renting item -->
             <button class="button is-success is-outlined">Item</button></a>
@@ -55,8 +53,6 @@
             Rental Item Owner:
             <a class="has-text-weight-bold mx-3" href="{% url 'profile' rez.item.owner.id %}">{{rez.item.owner.display_name}}</a></p>
     </div>
-
-
         <div class="column">
             <a href="{% url 'item_detail' rez.item.id %}">
                 <img src="{{rez.item.picture}}" alt="">

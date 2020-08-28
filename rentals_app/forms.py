@@ -56,14 +56,19 @@ class OwnerReservationForm(forms.ModelForm):
         }
 
 
-
-
 # ---------------------------------------------------------  Reviews
 
+CHOICES = [
+    (1, 'One Star'),
+    (2, 'Two Stars'),
+    (3, 'Three Stars'),
+    (4, 'Four Stars'),
+    (5, 'Five Stars'),
+    ]
 
 class ReviewForm(forms.ModelForm):
     body = forms.CharField(widget=forms.Textarea)
-    stars = forms.IntegerField(validators=[MaxValueValidator(5)])
+    stars = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
     class Meta:
         model = Review
         fields = ['title', 'stars', 'body']

@@ -8,6 +8,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 # ------------------------------------------------------------------- Models, Forms
+
 from .models import Profile, Rental_Item, Reservation, Location, Category, Review
 from .forms import ProfileForm, RentalItemForm, ReservationForm,OwnerReservationForm, ReviewForm
 
@@ -198,11 +199,15 @@ def profile(request, profile_id):
 # ------------------------------------------------------------------- Item Details
 
 def item_detail(request, item_id):
+    current_profile = ''
     item = Rental_Item.objects.get(id=item_id)
-    user = request.user
-    current_profile = Profile.objects.get(user_id=user.id)
     reservations = Reservation.objects.filter(item_id=item.id).order_by('start_date')
     reviews = Review.objects.filter(item_id=item_id)
+    print('hi Nathan')
+    print(request.user)
+    if request.user == 'AnonymousUser':
+        user = request.user
+        current_profile = Profile.objects.get(user_id=user.id)
     context = {
         'item':item,
         'current_profile':current_profile,
@@ -225,8 +230,7 @@ def add_item (request):
             current_profile = Profile.objects.get(user_id=user.id)
             new_item.owner_id = current_profile.id
             new_item.save()
-            index = new_item.id
-            return redirect('item_detail', index)
+            return redirect('item_detail', new_item.id)
         else: error_message = form.errors
     form = RentalItemForm
     context = {
@@ -293,7 +297,7 @@ def add_rez(request, item_id):
             msg = validate_rez(a,b,c,d,e)
             if not msg:
                 new_rez.save()
-                return redirect('home')
+                return redirect('rez_detail', new_rez.id)
             else:
                 error_message = msg
                 new_rez.save()
@@ -362,7 +366,7 @@ def rez_edit(request, rez_id):
 
 # ------------------------------------------------------------------- Reservation Revise by Owner
 
-
+@login_required
 def rez_edit_owner(request, rez_id):
     error_message = ''
     rez = Reservation.objects.get(id=rez_id)
@@ -426,6 +430,7 @@ def add_review(request, item_id):
 
 # ------------------------------------------------------------------- Edit Review
 
+@login_required
 def edit_review(request, rev_id):
     error_message = ''
     review = Review.objects.get(id=rev_id)

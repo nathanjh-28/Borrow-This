@@ -56,6 +56,22 @@ input[type=checkbox]{
     width: auto;
     display: inline;
 }
+input[type=radio]{
+    width: auto;
+    display: inline;
+}
+#id_stars{
+    display: flex;
+}
+
+#id_stars_0,
+#id_stars_1,
+#id_stars_2,
+#id_stars_3,
+#id_stars_4 {
+    margin-left: 1em;
+    margin-right: 1em;
+}
 
 .width-80 {
     width: 80%;
@@ -95,7 +111,10 @@ a {
     justify-content: center;
     flex-direction: column;
     align-items: center;
+}
 
+.hero.is-fullheight {
+    min-height: 95vh;
 }
 
 .hero-text {
