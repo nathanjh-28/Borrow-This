@@ -205,7 +205,7 @@ def item_detail(request, item_id):
     reviews = Review.objects.filter(item_id=item_id)
     print('hi Nathan')
     print(request.user)
-    if request.user == 'AnonymousUser':
+    if request.user is not 'AnonymousUser':
         user = request.user
         current_profile = Profile.objects.get(user_id=user.id)
     context = {

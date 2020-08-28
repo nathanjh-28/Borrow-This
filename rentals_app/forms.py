@@ -18,7 +18,7 @@ class ProfileForm(forms.ModelForm):
     bio = forms.CharField(widget=forms.Textarea)
     class Meta:
         model = Profile
-        fields = ['email', 'first_name', 'last_name', 'display_name', 'location','bio']
+        fields = ['email', 'first_name', 'last_name', 'display_name', 'location','bio', 'image']
         email = forms.EmailField()
 
 # ---------------------------------------------------------  Item Form
