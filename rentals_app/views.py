@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 # ------------------------------------------------------------------- Method For Today's Date
 from datetime import date
+
+# -- https://stackoverflow.com/questions/25961092/django-random-orderingorder-by-makes-additional-query
+from random import shuffle
 # ------------------------------------------------------------------- Auth 
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -123,7 +126,8 @@ def delete_profile(request):
 def browse(request):
     locations = Location.objects.all()
     categories = Category.objects.all()
-    items = Rental_Item.objects.all()
+    items = list(Rental_Item.objects.all())
+    shuffle(items)
     context = {
         'items':items,
         'cats': categories,
@@ -135,7 +139,8 @@ def browse(request):
 
 def browse_cat(request, cat_id):
     this_cat = Category.objects.get(id=cat_id)
-    items = Rental_Item.objects.filter(category_id=cat_id)
+    items = list(Rental_Item.objects.filter(category_id=cat_id))
+    shuffle(items)
     locations = Location.objects.all()
     categories = Category.objects.all()
     context = {
@@ -151,7 +156,8 @@ def browse_cat(request, cat_id):
 
 def browse_loc(request, loc_id):
     this_loc = Location.objects.get(id=loc_id)
-    items = Rental_Item.objects.filter(location_id=loc_id)
+    items = list(Rental_Item.objects.filter(location_id=loc_id))
+    shuffle(items)
     locations = Location.objects.all()
     categories = Category.objects.all()
     context = {
@@ -168,7 +174,8 @@ def browse_loc(request, loc_id):
 def browse_loc_cat(request, loc_id, cat_id):
     this_loc = Location.objects.get(id=loc_id)
     this_cat = Category.objects.get(id=cat_id)
-    items = Rental_Item.objects.filter(location_id=loc_id, category_id=cat_id)
+    items = list(Rental_Item.objects.filter(location_id=loc_id, category_id=cat_id))
+    shuffle(items)
     locations = Location.objects.all()
     categories = Category.objects.all()
     context = {
