@@ -2,15 +2,64 @@
 
 {% block content %}
 
-<div class="box mt-6">
-    <h1 class="title is-1">Write a Review! for {{item.title}}</h1>
-    <form class="add-item-form" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        {% if error_message %}<p class=" my-3 subtitle is-3 has-text-danger">{{ error_message }} </p>
-        {% endif %}
-        <input type="submit" class="button is-success" value="Add Review">
-    </form>
+<div class="columns mt-6 width-80">
+    <div class="box mx-3 column">
+        <h1 class="title is-1">Write a Review!</h1>
+        <form class="add-item-form" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% if error_message %}<p class=" my-3 subtitle is-3 has-text-danger">{{ error_message }} </p>
+            {% endif %}
+            <input type="submit" class="button is-success my-3" value="Add Review">
+        </form>
+    </div>
+    
+        <div class="card mx-3 item-details column">
+            <div class="mx-3 my-3">
+                <a href="{% url 'item_detail' item.id %}"><img src={{item.picture}} alt={{item.title}}></a>
+            </div>
+            <div class="card-content">
+                <p class="title is-4">{{item.title}}</p>
+                <a href="{% url 'profile' item.owner.id %}">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-48x48">
+                                <img src={{item.owner.image}} alt="Placeholder image">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <p class="subtitle is-6">{{item.owner}}</p>
+                        </div>
+                    </div>
+                </a>
+    
+                <div class="content mt-3">
+                    {{item.description}}
+                    <p>
+                        Minimum Rental Period:
+                        {{item.min_rental}}
+                        {% if item.min_rental == 1 %}
+                        day
+                        {% else %}
+                        days
+                        {% endif %}
+                    </p>
+                </div>
+                <p>
+                    {% if item.available %}
+                    Available For Rent
+                    {% else %}
+                    Not Available
+                    {% endif %}
+                </p>
+            </div>
+            <footer class="card-footer">
+                <p class="mx-3 my-3"> {{item.price}}/day</p>
+            </footer>
+
+    </div>
+
 </div>
+
 
 {% endblock%}

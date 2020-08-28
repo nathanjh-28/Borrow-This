@@ -2,62 +2,61 @@
 
 {% block content %}
 
-<div class="box mt-6">
-    <h1 class="title is-1">Occasion: {{rez.occasion}}</h1>
-    <a href="{% url 'item_detail' rez.item.id %}">
-        <h2 class="subtitle is-3">Renting: {{rez.item.title}}</h2>
-    </a>
-    <p>Start Date: </p>
-        <p>{{rez.start_date}}</p>
-    <p>End Date: </p>
-    <p>{{rez.end_date}}</p>
-    <p>Pick Up: </p>
-    <p>{{rez.pick_up}}</p>
-    <p>Drop Off: </p>
-    <p>{{rez.drop_off}}</p>
-    <p>Approved? </p>
-    <p>{% if rez.approved %}
-        Yes
-        {% else %}
-        No 
-        {% endif %}
-    </p> 
-    <p>Picked Up</p>
-    <p>{% if rez.picked_up %} Yes
-        {% else %} No 
-        {% endif %}
-    </p>
-    <p>Returned:</p>
-    <p>
-        {{rez.returned_date}}
-    </p>
-    <p>
-        Reservation Total: ${{rez_total}}
-    </p>
+<div class="box mt-6 width-80 columns">
+    <div class="column">
+        <h1 class="title is-1">{{rez.occasion}}</h1>
+        <a href="{% url 'item_detail' rez.item.id %}">
+            <h2 class="subtitle is-3 my-3">Borrowing: <span class="has-text-weight-bold">{{rez.item.title}}</h2></span>
+        </a>
+        <p class="my-3">Start Date: <span class="has-text-weight-bold">{{rez.start_date}} </span>End Date: <span class="has-text-weight-bold">{{rez.end_date}}</span></p>
+        <p class="my-3">Pick Up Date and Time: <span class="has-text-weight-bold">{{rez.pick_up}}</span></p> 
+        <p class="my-3"> Drop Off Date and Time: <span class="has-text-weight-bold">{{rez.drop_off}}</span></p>
+        <p class="my-3">Approved?
+            {% if rez.approved %}
+            <span class="has-text-weight-bold">Yes
+            {% else %}
+            No</span> 
+            {% endif %}
+        </p> 
+        <p class="my-3"> Picked Up <span class="has-text-weight-bold">
+            {% if rez.picked_up %} Yes
+            {% else %} No </span>
+            {% endif %}
+        </p>
+        <p class="my-3">Returned Date:
+            <span class="has-text-weight-bold">{{rez.returned_date}} </span>
+        </p>
+        <p class="my-3">
+            Reservation Total: <span class="has-text-weight-bold">${{rez_total}} </span>
+        </p>
 
-
-
-    <a href="{% url 'item_detail' rez.item.id %}">
-        <!-- If User is renting item -->
-        <button class="button is-success is-outlined">Item</button></a>
-        {% if current_profile.id == rez.renter.id %}
-        {% if not rez.approved %}
-    <a href="{% url 'rez_edit' rez.id %}">
-        <button class="button is-info">Edit</button></a>
-    <a href="{% url 'rez_delete' rez.id %}">
-        <button class="button is-danger">Delete</button></a>
-        {% endif %}{% endif %}
-        <!-- if User owns the item -->
-        {% if current_profile.id == rez.item.owner.id %}
-        <!-- <a href="#"><button class="button is-success">Approve!</button></a> -->
-        <a href="{% url 'rez_edit_owner' rez.id %}"><button class="button is-success"> Revise</button></a>
+        <a href="{% url 'item_detail' rez.item.id %}">
+            <!-- If User is renting item -->
+            <button class="button is-success is-outlined">Item</button></a>
+            {% if current_profile.id == rez.renter.id %}
+            {% if not rez.approved %}
+        <a href="{% url 'rez_edit' rez.id %}">
+            <button class="button is-info">Edit</button></a>
         <a href="{% url 'rez_delete' rez.id %}">
-        <button class="button is-danger">Delete</button></a>
-        {% endif %}
-        <p>Renter:</p>
-        <a href="{% url 'profile' rez.renter.id %}">{{rez.renter.display_name}}</a>
-        <p>Owner:</p>
-        <a href="{% url 'profile' rez.item.owner.id %}">{{rez.item.owner.display_name}}</a>
-
+            <button class="button is-danger">Delete</button></a>
+            {% endif %}{% endif %}
+            <!-- if User owns the item -->
+            {% if current_profile.id == rez.item.owner.id %}
+            <!-- <a href="#"><button class="button is-success">Approve!</button></a> -->
+            <a href="{% url 'rez_edit_owner' rez.id %}"><button class="button is-success"> Revise</button></a>
+            <a href="{% url 'rez_delete' rez.id %}">
+            <button class="button is-danger">Delete</button></a>
+            {% endif %}
+            <p class="my-3">Renter:
+            <a class="has-text-weight-bold mx-3" href="{% url 'profile' rez.renter.id %}">{{rez.renter.display_name}}</a></p>
+            <p class="my-3">
+            Rental Item Owner:
+            <a class="has-text-weight-bold mx-3" href="{% url 'profile' rez.item.owner.id %}">{{rez.item.owner.display_name}}</a></p>
+    </div>
+        <div class="column">
+            <a href="{% url 'item_detail' rez.item.id %}">
+                <img src="{{rez.item.picture}}" alt="">
+                </a>
+        </div>
 </div>
 {% endblock%}
