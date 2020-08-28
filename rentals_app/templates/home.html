@@ -12,14 +12,14 @@
                 </h1>
                 <h2 class="subtitle">
                     Where you can post anything 
-                and rent anything!  Click HERE for more information
+                and rent anything!  Click <a class="is-white" href="#about">HERE</a> for more information
                 </h2>
                 <div class="buttons">
-                    <a href= "{% url 'browse_cat' 3 %}" class="mx-3 my-3 cat card button">Camera Gear</a>
-                    <a href= "{% url 'browse_cat' 2 %}" class="mx-3 my-3 cat card button">Recreation</a>
-                    <a href= "{% url 'browse_cat' 5 %}"class="mx-3 my-3 cat card button">Transportation</a>
-                    <a href = "{% url 'browse_cat' 4 %}"class="mx-3 my-3 cat card button">Clothing</a>
-                    <a href= "{% url 'browse' %}"class="mx-3 my-3 cat card button">Everything</a>
+                    <a href= "{% url 'browse_cat' 3 %}" class="mx-3 my-3 cat card button is-large is-white is-outlined">Camera Gear</a>
+                    <a href= "{% url 'browse_cat' 2 %}" class="mx-3 my-3 cat card button is-large is-white is-outlined">Recreation</a>
+                    <a href= "{% url 'browse_cat' 5 %}"class="mx-3 my-3 cat card button is-large is-white is-outlined">Transportation</a>
+                    <a href = "{% url 'browse_cat' 4 %}"class="mx-3 my-3 cat card button is-large is-white is-outlined">Clothing</a>
+                    <a href= "{% url 'browse' %}"class="mx-3 my-3 cat card button is-large is-white is-outlined">Everything</a>
                 </div>
             </div>
             <div class="hero-space"></div>
@@ -33,7 +33,21 @@
                 About Borrow This!
             </h1>
             <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi maxime aut magnam inventore saepe, aliquam eos sit ad autem reprehenderit magni minima quae, laudantium repellendus non omnis cupiditate dolores aperiam. Blanditiis id unde magni similique molestias velit est harum earum incidunt voluptatem quos, ab quaerat tempora rerum pariatur obcaecati iure optio sed, mollitia in, iusto beatae? Commodi atque aspernatur id quibusdam vel quidem odit doloremque dignissimos aliquid, reiciendis quam eum, quasi sed corporis voluptatibus. Tempore quibusdam expedita maxime eius rem deserunt perferendis magnam facere sint dolorum, veritatis quas aliquid nemo tenetur officiis architecto aspernatur porro? Assumenda natus magni fugiat dolores?
+                What if you are going on a trip and you need an extra tent?  What if grandkids are visiting and you need a car seat for the weekend?  What if you have a collection of bicycles that are collecting dust that you wish someone would enjoy?  Or a fancy camera that you are trying to pay back your credit card on!  Well introducing...Borrow This! Which is a community of people who post items for rent and/or book other people's items for rent.  You can post ANYTHING and therefore rent ANYTHING Once you 
+                {% if user.is_authenticated%}
+                create an account
+                {% else %}
+                <a class="has-text-link has-text-weight-bold" href="{% url 'signup' %}">create an account</a>
+                {% endif %}
+                you can book reservations for items by <a class="has-text-link has-text-weight-bold" href="{% url 'browse' %}">browsing </a> as well as 
+                {% if user.is_authenticated%}
+                <a class="has-text-link has-text-weight-bold" href="{% url 'add_item' %}">post some of your own items to rent</a>
+                {% else%}
+                post some of your own items to rent
+                {% endif %}
+                on the 
+                {% if user.is_authenticated%} <a class="has-text-link has-text-weight-bold" href="{% url 'dashboard' %}"> dashboard. </a> {% else%}
+                dashboard.  {% endif %}Once you get rocking and rolling you can post reviews, approve reservations on your dashboard and borrow away!  
             </p>
         </div>
     </section>
@@ -44,8 +58,12 @@
                 About Me
             </h1>
             <div class="about-body">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi maxime aut magnam inventore saepe, aliquam eos sit ad autem reprehenderit magni minima quae, laudantium repellendus non omnis cupiditate dolores aperiam. Blanditiis id unde magni similique molestias velit est harum earum incidunt voluptatem quos, ab quaerat tempora rerum pariatur obcaecati iure optio sed, mollitia in, iusto beatae? Commodi atque aspernatur id quibusdam vel quidem odit doloremque dignissimos aliquid, reiciendis quam eum, quasi sed corporis voluptatibus. Tempore quibusdam expedita maxime eius rem deserunt perferendis magnam facere sint dolorum, veritatis quas aliquid nemo tenetur officiis architecto aspernatur porro? Assumenda natus magni fugiat dolores?
+                <p>
+                Hi my name is Nathan Harris and I created <a class="has-text-link has-text-weight-bold" href="https://github.com/nathanjh-28/Borrow-This">Borrow This ! </a> as a Capstone Project for General Assembly's Software Engineering Immersive.  I come from the entertainment industry where I worked as a lighting console programming and carried with me a fascination for the systems that make movies.  Now that fascination as shifted as I change focus from the big screen to the computer screen, enjoying all the complexities herein.  The idea of this project came from my friends always asking me to borrow a camping tent or my camera and my desire to help people use my film equipment.  I quickly realized that there are all kinds of items that people might be willing to rent and wouldn't it be cool if there was ONE place to view them?  I built this project with full stack Python Django, PostgreSQL for the database, and Bulma for the CSS Library.  I am really proud of this project as I tried to cram as many features as I could in one week.  I hope you get to enjoy it!
+                <a href="https://www.linkedin.com/in/nathanjosephharris/"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://github.com/nathanjh-28"><i class="fab fa-github"></i></a>
             </p>
+
             <img src="{% static 'images/nathan.jpg' %}" alt="" width="250px">
             </div>
             <p>

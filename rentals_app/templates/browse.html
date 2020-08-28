@@ -116,13 +116,13 @@
 </script>
 
 
-    <section class="br-rental-items">
+    <section class="br-rental-items width-80">
         <!-- https://stackoverflow.com/questions/1107737/numeric-for-loop-in-django-templates -->
         {#}{% for i in '0123456789'|make_list %}{#}
             {#}{{ forloop.counter}}{#}
         {% for item in items %}
         
-        <div class="card mx-1 my-1 br-rental-item">
+        <div class="card mx-1 my-1 br-rental-item zoom">
             <a href="{% url 'item_detail' item.id %}">
             <div class="card-image">
                 <figure class="image is-4by3">
